@@ -136,3 +136,5 @@ dist/*
 node_modules
 node_modules/*
 yarn-error.log
+key.pem
+cert.pem
