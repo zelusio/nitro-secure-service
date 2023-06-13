@@ -1,11 +1,10 @@
-FROM node:16-alpine3.16
+FROM node:18
 
-COPY ./index.js /index.js
-COPY ./package.json /package.json
-COPY ./package-lock.json /package-lock.json
+WORKDIR /usr/src/app
+COPY . .
 
-EXPOSE 8008
+RUN yarn install
+RUN yarn run build
 
-RUN npm i
-
-ENTRYPOINT ["node", "/index.js"]
+EXPOSE 3000
+CMD yarn run start
