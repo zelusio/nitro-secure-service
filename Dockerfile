@@ -1,11 +1,24 @@
-FROM node:16
+FROM node:18-alpine AS builder
 
-WORKDIR /usr/src/app
-COPY . .
+WORKDIR /usr/app
+COPY package.json .
+COPY tsconfig.json .
+COPY yarn.lock .
+RUN yarn install
 
-RUN npm install yarn
-RUN yarn install --verbose
+# set up source
+COPY ./src ./src
 RUN yarn run build
 
+FROM node:18-slim
+
+WORKDIR /usr/app
+RUN chown node:node .
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install --production
+COPY --from=builder /usr/app/dist ./dist
+
+USER node
 EXPOSE 3000
 CMD yarn run start
