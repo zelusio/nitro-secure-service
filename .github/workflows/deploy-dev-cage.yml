@@ -20,6 +20,8 @@ jobs:
           EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
 
         run: |
+          
+          echo $EV_CERT | head -n 2
           sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem

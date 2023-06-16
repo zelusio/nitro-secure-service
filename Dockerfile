@@ -19,6 +19,7 @@ COPY yarn.lock .
 RUN yarn install --production
 COPY --from=builder /usr/app/dist ./dist
 
-USER node
+# remove because it breaks evervault
+# USER node
 EXPOSE 3000
 CMD yarn run start
