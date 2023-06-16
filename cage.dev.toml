@@ -14,5 +14,5 @@ destinations = ["*"]
 ports = ["443"]
 
 [signing]
-certPath = ".\\cert.pem"
-keyPath = ".\\key.pem"
+certPath = "cert.pem"
+keyPath = "key.pem"
