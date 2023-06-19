@@ -25,5 +25,11 @@ jobs:
           echo "$EV_KEY" > key.pem
           ev-cage deploy -c cage.dev.toml
 
+      - name: Save PCR Attestations
+        uses: actions/upload-artifact@v3
+        with:
+            name: pcr-attestations
+            path: cage.dev.toml
+
 # ev-cage build --write --output . -c cage.dev.toml
 # TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
