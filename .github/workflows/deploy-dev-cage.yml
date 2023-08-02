@@ -8,7 +8,7 @@ on:
     paths:
       - .github/workflows/deploy-dev-cage.yml
       - src/**/*
-      - '${{ env.TOML_FILE_NAME }}'
+      - cage.dev.toml
     branches:
       - develop
 
