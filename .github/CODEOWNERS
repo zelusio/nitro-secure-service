@@ -1,0 +1,8 @@
+# global owners
+*       @k-mistele
+
+# ts owners
+*.ts    @k-mistele
+
+# toml owners
+*.toml  @k-misteleß
