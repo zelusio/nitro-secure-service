@@ -1,18 +1,17 @@
-name = "nitro-secure-service"
-uuid = "cage_56b510bbadc0"
+name = "nitro-secure-service-dev-insecure"
+uuid = "cage_c20a9cdaa662"
 app_uuid = "app_b81dd8dc1c0d"
 team_uuid = "team_e59a7c8b0849"
-debug = true
+debug = false
 dockerfile = "./Dockerfile"
-api_key_auth = false
+api_key_auth = true
 trx_logging = true
 disable_tls_termination = false
+forward_proxy_protocol = false
 
 [egress]
-enabled = true
-destinations = ["*"]
-ports = ["443"]
+enabled = false
 
 [signing]
-certPath = "cert.pem"
-keyPath = "key.pem"
+certPath = "./cert.pem"
+keyPath = "./key.pem"
