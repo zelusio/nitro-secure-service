@@ -1,13 +1,17 @@
+name: Deploy Dev (Insecure) Cage for Testing
+
+env:
+  TOML_FILE_NAME: 'cage.dev-insecure.toml'
+
 on:
   push:
     paths:
-      - .github/workflows/deploy-dev-cage.yml
+      - .github/workflows/deploy-dev-insecure-cage.yml
       - src/**/*
-      - cage.dev-insecure.toml
+      - ${{ env.TOML_FILE_NAME }}
     branches:
       - develop
 
-name: Deploy Dev Cage
 jobs:
   deploy-cage:
     runs-on: ubuntu-latest
@@ -23,13 +27,17 @@ jobs:
           sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev-cage deploy -c cage.dev.toml
+          ev-cage deploy -c $TOML_FILE_NAME
 
       - name: Save PCR Attestations
         uses: actions/upload-artifact@v3
         with:
             name: pcr-attestations
-            path: cage.dev-insecure.toml
+            path: ${{ env.TOML_FILE_NAME }}
+
+      - name: Upload Cert
+        run: |
+          ev-cage cert upload -c $TOML_FILE_PATH
 
 # ev-cage build --write --output . -c cage.dev.toml
 # TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457

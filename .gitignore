@@ -138,3 +138,7 @@ node_modules/*
 yarn-error.log
 key.pem
 cert.pem
+
+enclave.Dockerfile
+enclave.eif
+nitro-cli-image.Dockerfile
