@@ -13,8 +13,15 @@ jobs:
     name: Test Source Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        id: install-deps
+        run: yarn install
+
       - name: Run Tests
+        id: run-tests
         env:
           EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
           EVERVAULT_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
