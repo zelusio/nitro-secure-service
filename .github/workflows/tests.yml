@@ -1,0 +1,38 @@
+name: Run Test cases
+# write an "on" trigger for this github action to run on pull requests for develop, staging, and master branches
+on:
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - master
+  workflow_dispatch:
+
+jobs:
+  test-source-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        env:
+          EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
+          EVERVAULT_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
+          EVERVAULT_APP_ID: ${{ secrets.DEV_EVERVAULT_APP_ID }}
+          ENVIRONMENT: test
+        run: yarn run test
+
+      - name: Save PCR Attestations
+        uses: actions/upload-artifact@v3
+        with:
+            name: pcr-attestations
+            path: ${{ env.TOML_FILE_NAME }}
+
+      - name: Upload Cert
+        run: |
+          ev-cage cert upload -c TOML_FILE_NAME
+
+
+  test-build-dockerfile:
+
+# ev-cage build --write --output . -c cage.dev.toml
+# TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
