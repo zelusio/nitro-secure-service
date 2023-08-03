@@ -10,6 +10,7 @@ on:
 
 jobs:
   test-source-code:
+    name: Test Source Code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,18 +22,12 @@ jobs:
           ENVIRONMENT: test
         run: yarn run test
 
-      - name: Save PCR Attestations
-        uses: actions/upload-artifact@v3
-        with:
-            name: pcr-attestations
-            path: ${{ env.TOML_FILE_NAME }}
-
-      - name: Upload Cert
-        run: |
-          ev-cage cert upload -c TOML_FILE_NAME
-
-
   test-build-dockerfile:
-
-# ev-cage build --write --output . -c cage.dev.toml
-# TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
+    name: Try Building Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Dockerfile
+        env:
+          ENVIRONMENT: test
+        run: docker build -t nitro-secure-service:test-build -f Dockerfile .
