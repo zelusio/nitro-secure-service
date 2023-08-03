@@ -16,7 +16,7 @@ jobs:
   deploy-cage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Deploy Dev Cage
         env:
           EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
