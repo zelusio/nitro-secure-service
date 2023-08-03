@@ -138,6 +138,8 @@ node_modules/*
 yarn-error.log
 key.pem
 cert.pem
+*.pem
+*.cert
 
 enclave.Dockerfile
 enclave.eif
