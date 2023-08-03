@@ -1,0 +1,59 @@
+import axios from "axios";
+import {
+    IDecryptedWalletEmail,
+    IDecryptedWalletPhone, IEncryptedWallet,
+} from "../interfaces/wallet.interface";
+import * as process from "process";
+import dotenv from "dotenv";
+import { encryptBySdk } from "./evervault.service";
+
+dotenv.config()
+
+const { ENVIRONMENT } = process.env;
+const CAGE_ENCRYPT_URL = 'http://127.0.0.1:9999/encrypt';
+
+export async function encryptByCage(text: string): Promise<string> {
+    if (ENVIRONMENT === 'test') {
+        return await encryptBySdk(text)
+    }
+
+    const result = await axios.post(CAGE_ENCRYPT_URL, { text });
+
+    return result.data.text;
+}
+
+export async function encryptWalletWithEmail(
+    ethereumAddress: string,
+    mnemonic: string,
+    privateKey: string,
+    email: string
+): Promise<IEncryptedWallet> {
+    const decryptedWallet: IDecryptedWalletEmail = {
+        mnemonic,
+        privateKey,
+        ethereumAddress,
+        email
+    }
+
+    const encryptedWallet = await encryptByCage(JSON.stringify(decryptedWallet));
+
+    return { encryptedWallet }
+}
+
+export async function encryptWalletWithPhone(
+    ethereumAddress: string,
+    mnemonic: string,
+    privateKey: string,
+    phone: string
+): Promise<IEncryptedWallet> {
+    const decryptedWallet: IDecryptedWalletPhone = {
+        mnemonic,
+        privateKey,
+        ethereumAddress,
+        phone
+    }
+
+    const encryptedWallet = await encryptByCage(JSON.stringify(decryptedWallet));
+
+    return { encryptedWallet }
+}

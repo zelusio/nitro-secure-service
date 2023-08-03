@@ -1,11 +1,22 @@
-
 import express, {Express, Request, Response} from 'express';
+import apiV1Router from './api/v1/router';
+import bodyParser from "body-parser";
 
-const app: Express = express();
 
-app.get('/', (req: Request, res: Response)=>{
-    res.send('Hello, this is Express + TypeScript');
-});
+export function createExpressApp() {
+    const app: Express = express();
+    app.disable('etag');
 
-export default app
+    // Set up body parsing middleware
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    app.get('/', (req: Request, res: Response) => {
+        res.json({ status: 'ok' });
+    });
+
+    app.use('/api/v1', apiV1Router);
+
+    return app;
+}
 
