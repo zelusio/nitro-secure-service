@@ -1,4 +1,4 @@
-import { ethers, Wallet } from "ethers";
+import { Wallet } from "ethers";
 import {IDecryptedWallet} from "../interfaces/wallet.interface";
 import loggingService from "./logging.service";
 

@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
+    "scan:secrets": "ggshield secret scan path -y -r .",
+    "scan:secrets:precommit": "ggshield secret scan pre-commit",
     "build": "tsc",
     "dev": "nodemon",
     "start": "node --experimental-specifier-resolution=node dist/index.js",
+    "lint": "eslint src/*.ts src/**/*.ts tests/*.ts tests/**/*.ts",
     "test": "mocha tests/**/*.spec.ts --timeout 2000 --exit"
   },
   "dependencies": {
@@ -33,6 +37,7 @@
     "chai-http": "^4.4.0",
     "concurrently": "^8.2.0",
     "eslint": "^8.42.0",
+    "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
