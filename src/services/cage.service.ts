@@ -6,6 +6,7 @@ import {
 import * as process from "process";
 import dotenv from "dotenv";
 import { encryptBySdk } from "./evervault.service";
+import loggingService from "./logging.service";
 
 dotenv.config()
 
@@ -37,6 +38,11 @@ export async function encryptWalletWithEmail(
 
     const encryptedWallet = await encryptByCage(JSON.stringify(decryptedWallet));
 
+    if (!encryptedWallet) {
+        loggingService.error('Encrypted method return null')
+        throw new Error('Encrypted method return null')
+    }
+
     return { encryptedWallet }
 }
 
@@ -54,6 +60,11 @@ export async function encryptWalletWithPhone(
     }
 
     const encryptedWallet = await encryptByCage(JSON.stringify(decryptedWallet));
+
+    if (!encryptedWallet) {
+        loggingService.error('Encrypted method return null')
+        throw new Error('Encrypted method return null')
+    }
 
     return { encryptedWallet }
 }
