@@ -35,9 +35,6 @@ jobs:
             name: pcr-attestations
             path: ${{ env.TOML_FILE_NAME }}
 
-      - name: Upload Cert
-        run: |
-          ev-cage cert upload -c TOML_FILE_NAME
 
 # ev-cage build --write --output . -c cage.dev.toml
 # TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
