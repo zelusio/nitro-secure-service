@@ -1,4 +1,4 @@
-name: Deploy Dev Cage
+name: Deploy Staging Cage
 
 env:
   TOML_FILE_NAME: 'cage.staging.toml'
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy Dev Cage
+      - name: Deploy Staging Cage
         env:
           EV_API_KEY: ${{ secrets.STAGING_EVERVAULT_API_KEY }}
           EV_CERT: ${{ secrets.STAGING_EVERVAULT_CERT }}
