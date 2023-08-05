@@ -2,26 +2,45 @@
   "name": "nitro-secure-service",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "npx tsc",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "start": "node dist/app.js"
+    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
+    "scan:secrets": "ggshield secret scan path -y -r .",
+    "scan:secrets:precommit": "ggshield secret scan pre-commit",
+    "build": "tsc",
+    "dev": "nodemon",
+    "start": "node --experimental-specifier-resolution=node dist/index.js",
+    "lint": "eslint src/*.ts src/**/*.ts tests/*.ts tests/**/*.ts",
+    "test": "mocha tests/**/*.spec.ts --timeout 2000 --exit"
   },
   "dependencies": {
+    "@evervault/sdk": "^4.0.0",
+    "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.1.4",
+    "ethers": "^6.6.7",
     "express": "^4.18.2",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.2",
+    "@types/chai": "^4.3.5",
+    "@types/chai-http": "^4.2.0",
     "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^20.3.1",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
     "concurrently": "^8.2.0",
     "eslint": "^8.42.0",
+    "husky": "^8.0.3",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }
 }

@@ -1,16 +1,16 @@
 name: Deploy Dev Cage
 
 env:
-  TOML_FILE_NAME: 'cage.dev.toml'
+  TOML_FILE_NAME: 'cage.staging.toml'
 
 on:
   push:
     paths:
       - .github/workflows/deploy-dev-cage.yml
       - src/**/*
-      - cage.dev.toml
+      - cage.staging.toml
     branches:
-      - develop
+      - staging
 
 jobs:
   deploy-cage:
@@ -19,9 +19,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Deploy Dev Cage
         env:
-          EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
-          EV_CERT: ${{ secrets.DEV_EVERVAULT_CERT }}
-          EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
+          EV_API_KEY: ${{ secrets.STAGING_EVERVAULT_API_KEY }}
+          EV_CERT: ${{ secrets.STAGING_EVERVAULT_CERT }}
+          EV_KEY: ${{ secrets.STAGING_EVERVAULT_KEY }}
 
         run: |
           sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
@@ -35,9 +35,9 @@ jobs:
             name: pcr-attestations
             path: ${{ env.TOML_FILE_NAME }}
 
-      #- name: Upload Cert
-      #  run: |
-      #    ev-cage cert upload -c TOML_FILE_NAME
+      - name: Upload Cert
+        run: |
+          ev-cage cert upload -c TOML_FILE_NAME
 
 # ev-cage build --write --output . -c cage.dev.toml
 # TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457

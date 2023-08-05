@@ -1,14 +1,14 @@
-name: Deploy Dev Cage
+name: Deploy Dev (Insecure) Cage for Testing
 
 env:
-  TOML_FILE_NAME: 'cage.dev.toml'
+  TOML_FILE_NAME: 'cage.dev-insecure.toml'
 
 on:
   push:
     paths:
-      - .github/workflows/deploy-dev-cage.yml
+      - .github/workflows/deploy-dev-insecure-cage.yml
       - src/**/*
-      - cage.dev.toml
+      - cage.dev-insecure.toml
     branches:
       - develop
 
@@ -37,7 +37,7 @@ jobs:
 
       #- name: Upload Cert
       #  run: |
-      #    ev-cage cert upload -c TOML_FILE_NAME
+      #    ev-cage cert upload -c $TOML_FILE_NAME
 
 # ev-cage build --write --output . -c cage.dev.toml
 # TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
