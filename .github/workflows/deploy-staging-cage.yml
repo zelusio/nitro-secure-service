@@ -6,7 +6,7 @@ env:
 on:
   push:
     paths:
-      - .github/workflows/deploy-dev-cage.yml
+      - .github/workflows/deploy-staging-cage.yml
       - src/**/*
       - cage.staging.toml
     branches:
@@ -34,6 +34,10 @@ jobs:
         with:
             name: pcr-attestations
             path: ${{ env.TOML_FILE_NAME }}
+
+      #- name: Upload Cert
+      #  run: |
+      #    ev-cage cert upload -c TOML_FILE_NAME
 
 
 # ev-cage build --write --output . -c cage.dev.toml
