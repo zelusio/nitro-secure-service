@@ -38,7 +38,7 @@ router.post("/wallet", async (req: Request, res: Response) => {
         email
       }
 
-      res.send({ data });
+      return res.send({ data });
     }
 
     if (phone) {
@@ -55,7 +55,7 @@ router.post("/wallet", async (req: Request, res: Response) => {
         phone
       }
 
-      res.send({ data });
+      return res.send({ data });
     }
 
     const error: IResponseError = {
@@ -63,7 +63,7 @@ router.post("/wallet", async (req: Request, res: Response) => {
       code: ERROR_CODES.BAD_REQUEST
     }
 
-    res.send({ error });
+    return res.send({ error });
   } catch (err: any) {
     loggingService.error("Could not create wallet", err.message);
 
@@ -72,7 +72,7 @@ router.post("/wallet", async (req: Request, res: Response) => {
       code: ERROR_CODES.INTERNAL_ERROR
     }
 
-    res.status(500).send({ error })
+    return res.status(500).send({ error })
   }
 });
 
