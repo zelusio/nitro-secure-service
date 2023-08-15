@@ -43,6 +43,15 @@ describe('HTTP Status Code Tests', function () {
     expect(decryptedWallet.ethereumAddress).to.eq(res.body.data.ethereumAddress)
   });
 
+  it('POST /api/v1/wallet many times with email should ok', async function () {
+    for (let i =0; i<10; i++) {
+      const email = `email_${i}.test.com`
+      const res = await chai.request(expressApp).post('/api/v1/wallet').send({email});
+
+      expect(res.status).to.equal(200);
+    }
+  });
+
   it('POST /api/v1/wallet with phone should ok', async function () {
     const phone = '+123456789'
     const res = await chai.request(expressApp).post('/api/v1/wallet').send({phone});
