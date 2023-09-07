@@ -62,15 +62,15 @@ const params = {
 }
 
 // Upload the PCRs to AWSSM, handling any errors
-secretsManager.updateSecret(params, (err, data) => {
-    if (err) {
-        console.error(`ERROR | Failed to upload PCRs to AWSSM: ${err}`)
-        console.error(err.stack)
-        process.exit(1)
-    }
-    else {
-        console.log(`INFO | Successfully uploaded PCRs to AWSSM!`)
-        console.log(data)
-        process.exit(1)
-    }
-})
+// secretsManager.updateSecret(params, (err, data) => {
+//     if (err) {
+//         console.error(`ERROR | Failed to upload PCRs to AWSSM: ${err}`)
+//         console.error(err.stack)
+//         process.exit(1)
+//     }
+//     else {
+//         console.log(`INFO | Successfully uploaded PCRs to AWSSM!`)
+//         console.log(data)
+//         process.exit(1)
+//     }
+// })
