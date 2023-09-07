@@ -71,6 +71,6 @@ secretsManager.updateSecret(params, (err, data) => {
     else {
         console.log(`INFO | Successfully uploaded PCRs to AWSSM!`)
         console.log(data)
-        process.exit(1)
+        process.exit(0)
     }
 })
