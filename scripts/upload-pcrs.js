@@ -21,7 +21,7 @@ if (!secretName) {
 console.log(`INFO | AWSSM secret name: ${secretName}`)
 
 // Parse the TOML file and extract the PCRs, sanity check
-const tomlFile = fs.readFileSync(tomlFileName, 'utf8')
+const tomlFile = fs.readFileSync(`../${tomlFileName}`, 'utf8')
 console.log(`INFO | Read TOML file.`)
 const attestationDoc = toml.parse(tomlFile)
 console.log(`INFO | Parsed TOML file`)
