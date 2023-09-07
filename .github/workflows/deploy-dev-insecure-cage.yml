@@ -43,11 +43,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.CDK_DEPLOYMENT_AMAZON_SECRET_KEY }}
           aws-region: us-east-1
 
-      - name: Upload PCRs to AWSSM
-        run: cd scripts && yarn run install && node scripts/upload-pcrs.js $TOML_FILE_NAME nitro-secure-service/$STAGE/pcrs
-      #- name: Upload Cert
-      #  run: |
-      #    ev-cage cert upload -c $TOML_FILE_NAME
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-# ev-cage build --write --output . -c cage.dev.toml
-# TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
+      - name: Upload PCRs to AWSSM
+        run: yarn add toml fs aws-sdk && node scripts/upload-pcrs.js $TOML_FILE_NAME nitro-secure-service/$STAGE/pcrs
