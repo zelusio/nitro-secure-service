@@ -44,7 +44,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Upload PCRs to AWSSM
-        run: node scripts/upload-pcrs.js $TOML_FILE_NAME nitro-secure-service/$STAGE/pcrs
+        run: cd scripts && yarn run install && node scripts/upload-pcrs.js $TOML_FILE_NAME nitro-secure-service/$STAGE/pcrs
       #- name: Upload Cert
       #  run: |
       #    ev-cage cert upload -c $TOML_FILE_NAME
