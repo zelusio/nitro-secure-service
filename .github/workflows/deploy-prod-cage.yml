@@ -2,6 +2,7 @@ name: Deploy Prod Cage
 
 env:
   TOML_FILE_NAME: 'cage.prod.toml'
+  STAGE: 'prod'
 
 on:
   push:
@@ -35,9 +36,17 @@ jobs:
             name: pcr-attestations
             path: ${{ env.TOML_FILE_NAME }}
 
-      #- name: Upload Cert
-      #  run: |
-      #    ev-cage cert upload -c TOML_FILE_NAME
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.CDK_DEPLOYMENT_AMAZON_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.CDK_DEPLOYMENT_AMAZON_SECRET_KEY }}
+          aws-region: us-east-1
 
-# ev-cage build --write --output . -c cage.dev.toml
-# TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Upload PCRs to AWSSM
+        run: cd scripts && yarn && node upload-pcrs.js $TOML_FILE_NAME nitro-secure-service/$STAGE/pcrs
