@@ -1,0 +1,40 @@
+name: Run Test cases
+# write an "on" trigger for this github action to run on pull requests for develop, staging, and master branches
+on:
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - master
+  workflow_dispatch:
+
+jobs:
+  test-source-code:
+    name: Test Source Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        id: install-deps
+        run: yarn install
+
+      - name: Run Tests
+        id: run-tests
+        env:
+          EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
+          EVERVAULT_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
+          EVERVAULT_APP_ID: ${{ secrets.DEV_EVERVAULT_APP_ID }}
+          ENVIRONMENT: test
+        run: yarn run test
+
+  test-build-dockerfile:
+    name: Try Building Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Dockerfile
+        env:
+          ENVIRONMENT: test
+        run: docker build -t nitro-secure-service:test-build -f Dockerfile .

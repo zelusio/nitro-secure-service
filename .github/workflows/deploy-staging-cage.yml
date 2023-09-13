@@ -1,28 +1,28 @@
-name: Deploy Dev Cage
+name: Deploy Staging Cage
 
 env:
-  TOML_FILE_NAME: 'cage.dev.toml'
-  STAGE: dev
+  TOML_FILE_NAME: 'cage.staging.toml'
+  STAGE: staging
 
 on:
   push:
     paths:
-      - .github/workflows/deploy-dev-cage.yml
+      - .github/workflows/deploy-staging-cage.yml
       - src/**/*
-      - cage.dev.toml
+      - cage.staging.toml
     branches:
-      - develop
+      - staging
 
 jobs:
   deploy-cage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy Dev Cage
+      - name: Deploy Staging Cage
         env:
-          EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
-          EV_CERT: ${{ secrets.DEV_EVERVAULT_CERT }}
-          EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
+          EV_API_KEY: ${{ secrets.STAGING_EVERVAULT_API_KEY }}
+          EV_CERT: ${{ secrets.STAGING_EVERVAULT_CERT }}
+          EV_KEY: ${{ secrets.STAGING_EVERVAULT_KEY }}
 
         run: |
           sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
@@ -30,7 +30,7 @@ jobs:
           echo "$EV_KEY" > key.pem
           ev-cage deploy -c $TOML_FILE_NAME
 
-      - name: Save PCR Attestations to Artifacts
+      - name: Save PCR Attestations
         uses: actions/upload-artifact@v3
         with:
             name: pcr-attestations
