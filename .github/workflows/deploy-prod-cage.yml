@@ -1,28 +1,28 @@
-name: Deploy Staging Cage
+name: Deploy Prod Cage
 
 env:
-  TOML_FILE_NAME: 'cage.staging.toml'
-  STAGE: staging
+  TOML_FILE_NAME: 'cage.prod.toml'
+  STAGE: 'prod'
 
 on:
   push:
     paths:
-      - .github/workflows/deploy-staging-cage.yml
+      - .github/workflows/deploy-prod-cage.yml
       - src/**/*
-      - cage.staging.toml
+      - cage.prod.toml
     branches:
-      - staging
+      - master
 
 jobs:
   deploy-cage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy Staging Cage
+      - name: Deploy Prod Cage
         env:
-          EV_API_KEY: ${{ secrets.STAGING_EVERVAULT_API_KEY }}
-          EV_CERT: ${{ secrets.STAGING_EVERVAULT_CERT }}
-          EV_KEY: ${{ secrets.STAGING_EVERVAULT_KEY }}
+          EV_API_KEY: ${{ secrets.PROD_EVERVAULT_API_KEY }}
+          EV_CERT: ${{ secrets.PROD_EVERVAULT_CERT }}
+          EV_KEY: ${{ secrets.PROD_EVERVAULT_KEY }}
 
         run: |
           sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
