@@ -1,0 +1,43 @@
+name: Deploy Prod Cage
+
+env:
+  TOML_FILE_NAME: 'cage.prod.toml'
+
+on:
+  push:
+    paths:
+      - .github/workflows/deploy-prod-cage.yml
+      - src/**/*
+      - cage.prod.toml
+    branches:
+      - master
+
+jobs:
+  deploy-cage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy Prod Cage
+        env:
+          EV_API_KEY: ${{ secrets.PROD_EVERVAULT_API_KEY }}
+          EV_CERT: ${{ secrets.PROD_EVERVAULT_CERT }}
+          EV_KEY: ${{ secrets.PROD_EVERVAULT_KEY }}
+
+        run: |
+          sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
+          echo "$EV_CERT" > cert.pem
+          echo "$EV_KEY" > key.pem
+          ev-cage deploy -c $TOML_FILE_NAME
+
+      - name: Save PCR Attestations
+        uses: actions/upload-artifact@v3
+        with:
+            name: pcr-attestations
+            path: ${{ env.TOML_FILE_NAME }}
+
+      #- name: Upload Cert
+      #  run: |
+      #    ev-cage cert upload -c TOML_FILE_NAME
+
+# ev-cage build --write --output . -c cage.dev.toml
+# TODO https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action/58393457#58393457
