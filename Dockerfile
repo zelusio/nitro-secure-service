@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18.17.1-alpine AS builder
 
 WORKDIR /usr/app
 COPY package.json .
@@ -10,7 +10,7 @@ RUN yarn install
 COPY ./src ./src
 RUN yarn run build
 
-FROM node:18-slim
+FROM node:18.17.1-slim
 
 WORKDIR /usr/app
 RUN chown node:node .
