@@ -31,5 +31,5 @@ export default {
   error,
   debug,
   logForRequest,
-  errorForRequest,
+  errorForRequest
 };
