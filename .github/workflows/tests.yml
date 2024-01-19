@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Dependencies
         id: install-deps
-        run: yarn install
+        run: npm install
 
       - name: Run Tests
         id: run-tests
@@ -27,7 +27,7 @@ jobs:
           EVERVAULT_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
           EVERVAULT_APP_ID: ${{ secrets.DEV_EVERVAULT_APP_ID }}
           ENVIRONMENT: test
-        run: yarn run test
+        run: npm run test
 
   test-build-dockerfile:
     name: Try Building Dockerfile
