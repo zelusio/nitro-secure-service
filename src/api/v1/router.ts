@@ -83,12 +83,12 @@ router.post('/service/wallet', async (req: Request, res: Response) => {
     const wallet: IDecryptedWallet = createWallet();
     const ethereumAddress = wallet.ethereumAddress;
 
-    const encryptedWallet: IEncryptedWallet = await encryptWalletForService(
+    const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
       ethereumAddress,
-      wallet.mnemonic,
-      wallet.privateKey,
+      mnemonic: wallet.mnemonic,
+      privateKey: wallet.privateKey,
       email
-    );
+    });
 
     const data: IResponseWalletCreateEmail = {
       ...encryptedWallet,
@@ -114,12 +114,12 @@ router.post('/service/wallet/import', async (req: Request, res: Response) => {
   try {
     const { email, ethereumAddress, mnemonic, privateKey } = req.body;
 
-    const encryptedWallet: IEncryptedWallet = await encryptWalletForService(
+    const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
       ethereumAddress,
       mnemonic,
       privateKey,
       email
-    );
+    });
 
     const data: IResponseWalletCreateEmail = {
       ...encryptedWallet,

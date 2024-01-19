@@ -22,10 +22,13 @@ export interface IEncryptedWallet {
   encryptedWallet: string;
 }
 
-export interface IDecryptedWalletService {
+export interface IWalletServiceData {
   ethereumAddress: string;
-  mnemonic: string;
+  mnemonic?: string;
   privateKey: string;
   email: string;
+}
+
+export interface IDecryptedWalletService extends IWalletServiceData {
   isServiceAccount: boolean;
 }

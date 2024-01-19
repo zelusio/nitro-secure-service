@@ -5,7 +5,8 @@ import {
   IDecryptedWalletEmail,
   IDecryptedWalletPhone,
   IDecryptedWalletService,
-  IEncryptedWallet
+  IEncryptedWallet,
+  IWalletServiceData
 } from '../interfaces/wallet.interface';
 import { encryptBySdk } from './evervault.service';
 import loggingService from './logging.service';
@@ -71,12 +72,12 @@ export async function encryptWalletWithPhone(
   return { encryptedWallet };
 }
 
-export async function encryptWalletForService(
-  ethereumAddress: string,
-  mnemonic: string,
-  privateKey: string,
-  email: string
-): Promise<IEncryptedWallet> {
+export async function encryptWalletForService({
+  mnemonic,
+  privateKey,
+  ethereumAddress,
+  email
+}: IWalletServiceData): Promise<IEncryptedWallet> {
   const decryptedWallet: IDecryptedWalletService = {
     mnemonic,
     privateKey,

@@ -58,7 +58,7 @@ describe('Cage Service Tests', function () {
     const privateKey = '0x002';
     const email = 'test@email.com';
 
-    const res = await encryptWalletForService(ethereumAddress, mnemonic, privateKey, email);
+    const res = await encryptWalletForService({ ethereumAddress, mnemonic, privateKey, email });
 
     expect(res).to.have.property('encryptedWallet');
 
@@ -68,6 +68,26 @@ describe('Cage Service Tests', function () {
 
     expect(decryptedWallet.ethereumAddress).to.eq(ethereumAddress);
     expect(decryptedWallet.mnemonic).to.eq(mnemonic);
+    expect(decryptedWallet.privateKey).to.eq(privateKey);
+    expect(decryptedWallet.email).to.eq(email);
+    expect(decryptedWallet.isServiceAccount).to.eq(true);
+  });
+
+  it('encryptWalletForService should ok without mnemonic', async function () {
+    const ethereumAddress = '0x001';
+    const privateKey = '0x002';
+    const email = 'test@email.com';
+
+    const res = await encryptWalletForService({ ethereumAddress, privateKey, email });
+
+    expect(res).to.have.property('encryptedWallet');
+
+    const decrypted = await decryptBySdk(res.encryptedWallet);
+
+    const decryptedWallet: IDecryptedWalletService = JSON.parse(decrypted);
+
+    expect(decryptedWallet.ethereumAddress).to.eq(ethereumAddress);
+    expect(decryptedWallet.mnemonic).to.eq(undefined);
     expect(decryptedWallet.privateKey).to.eq(privateKey);
     expect(decryptedWallet.email).to.eq(email);
     expect(decryptedWallet.isServiceAccount).to.eq(true);
