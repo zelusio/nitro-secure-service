@@ -6,7 +6,8 @@ import loggingService from '../../services/logging.service';
 import {
   IResponseError,
   IResponseWalletCreateEmail,
-  IResponseWalletCreatePhone
+  IResponseWalletCreatePhone,
+  IResponseWalletCreateService
 } from '../../interfaces/response.interface';
 import { ERROR_CODES } from '../../constants/errors';
 
@@ -76,10 +77,10 @@ router.post('/wallet', async (req: Request, res: Response) => {
   }
 });
 
-// CREATE NEW WALLET AND ENCRYPT FOR SERVICE WALLET
+// CREATE NEW WALLET AND ENCRYPT FOR SERVICE ACCOUNT
 router.post('/service/wallet', async (req: Request, res: Response) => {
   try {
-    const { email } = req.body;
+    const { accountId } = req.body;
     const wallet: IDecryptedWallet = createWallet();
     const ethereumAddress = wallet.ethereumAddress;
 
@@ -87,13 +88,14 @@ router.post('/service/wallet', async (req: Request, res: Response) => {
       ethereumAddress,
       mnemonic: wallet.mnemonic,
       privateKey: wallet.privateKey,
-      email
+      accountId
     });
 
-    const data: IResponseWalletCreateEmail = {
+    const data: IResponseWalletCreateService = {
       ...encryptedWallet,
       ethereumAddress,
-      email
+      accountId,
+      isServiceAccount: true
     };
 
     return res.send({ data });
@@ -112,19 +114,20 @@ router.post('/service/wallet', async (req: Request, res: Response) => {
 // ENCRYPT IMPORTED WALLET FOR SERVICE WALLET
 router.post('/service/wallet/import', async (req: Request, res: Response) => {
   try {
-    const { email, ethereumAddress, mnemonic, privateKey } = req.body;
+    const { accountId, ethereumAddress, mnemonic, privateKey } = req.body;
 
     const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
       ethereumAddress,
       mnemonic,
       privateKey,
-      email
+      accountId
     });
 
-    const data: IResponseWalletCreateEmail = {
+    const data: IResponseWalletCreateService = {
       ...encryptedWallet,
       ethereumAddress,
-      email
+      accountId,
+      isServiceAccount: true
     };
 
     return res.send({ data });

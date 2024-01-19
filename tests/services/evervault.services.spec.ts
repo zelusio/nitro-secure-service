@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { decryptBySdk, encryptBySdk } from '../../src/services/evervault.service';
 
 describe('Evervault Service Tests', function () {
-  it('Encrypt buy SDK should ok', async function () {
+  it('Encrypt by SDK should ok', async function () {
     const data = { foo: 'bar' };
     const res = await encryptBySdk(JSON.stringify(data));
 

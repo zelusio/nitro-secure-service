@@ -76,13 +76,13 @@ export async function encryptWalletForService({
   mnemonic,
   privateKey,
   ethereumAddress,
-  email
+  accountId
 }: IWalletServiceData): Promise<IEncryptedWallet> {
   const decryptedWallet: IDecryptedWalletService = {
     mnemonic,
     privateKey,
     ethereumAddress,
-    email,
+    accountId,
     isServiceAccount: true
   };
 

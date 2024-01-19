@@ -80,16 +80,17 @@ describe('HTTP Status Code Tests', function () {
   });
 
   it('POST /api/v1/service/wallet should ok', async function () {
-    const email = 'email@test.com';
+    const accountId = 'account_123';
 
-    const res = await chai.request(expressApp).post('/api/v1/service/wallet').send({ email });
+    const res = await chai.request(expressApp).post('/api/v1/service/wallet').send({ accountId });
 
     expect(res.status).to.equal(200);
 
     expect(res.body).to.have.property('data');
     expect(res.body.data).to.have.property('encryptedWallet');
     expect(res.body.data).to.have.property('ethereumAddress');
-    expect(res.body.data).to.have.property('email', email);
+    expect(res.body.data).to.have.property('accountId', accountId);
+    expect(res.body.data).to.have.property('isServiceAccount', true);
 
     const decrypted = await decryptBySdk(res.body.data.encryptedWallet);
 
@@ -98,7 +99,7 @@ describe('HTTP Status Code Tests', function () {
     expect(decryptedWallet).to.have.property('mnemonic');
     expect(decryptedWallet.mnemonic?.split(' ').length).eq(12);
     expect(decryptedWallet).to.have.property('privateKey');
-    expect(decryptedWallet).to.have.property('email', email);
+    expect(decryptedWallet).to.have.property('accountId', accountId);
     expect(decryptedWallet).to.have.property('ethereumAddress', res.body.data.ethereumAddress);
     expect(decryptedWallet).to.have.property('isServiceAccount', true);
   });
@@ -107,19 +108,20 @@ describe('HTTP Status Code Tests', function () {
     const ethereumAddress = '0x001';
     const mnemonic = 'one two three four five six seven eight nine ten eleven twelve';
     const privateKey = '0x002';
-    const email = 'test@email.com';
+    const accountId = 'account_123';
 
     const res = await chai
       .request(expressApp)
       .post('/api/v1/service/wallet/import')
-      .send({ email, ethereumAddress, mnemonic, privateKey });
+      .send({ accountId, ethereumAddress, mnemonic, privateKey });
 
     expect(res.status).to.equal(200);
 
     expect(res.body).to.have.property('data');
     expect(res.body.data).to.have.property('encryptedWallet');
     expect(res.body.data).to.have.property('ethereumAddress', ethereumAddress);
-    expect(res.body.data).to.have.property('email', email);
+    expect(res.body.data).to.have.property('accountId', accountId);
+    expect(res.body.data).to.have.property('isServiceAccount', true);
 
     const decrypted = await decryptBySdk(res.body.data.encryptedWallet);
 
@@ -127,7 +129,7 @@ describe('HTTP Status Code Tests', function () {
 
     expect(decryptedWallet).to.have.property('mnemonic', mnemonic);
     expect(decryptedWallet).to.have.property('privateKey', privateKey);
-    expect(decryptedWallet).to.have.property('email', email);
+    expect(decryptedWallet).to.have.property('accountId', accountId);
     expect(decryptedWallet).to.have.property('ethereumAddress', ethereumAddress);
     expect(decryptedWallet).to.have.property('isServiceAccount', true);
   });
@@ -135,19 +137,20 @@ describe('HTTP Status Code Tests', function () {
   it('POST /api/v1/service/wallet/import should ok without mnemonic', async function () {
     const ethereumAddress = '0x001';
     const privateKey = '0x002';
-    const email = 'test@email.com';
+    const accountId = 'account_123';
 
     const res = await chai
       .request(expressApp)
       .post('/api/v1/service/wallet/import')
-      .send({ email, ethereumAddress, privateKey });
+      .send({ accountId, ethereumAddress, privateKey });
 
     expect(res.status).to.equal(200);
 
     expect(res.body).to.have.property('data');
     expect(res.body.data).to.have.property('encryptedWallet');
     expect(res.body.data).to.have.property('ethereumAddress', ethereumAddress);
-    expect(res.body.data).to.have.property('email', email);
+    expect(res.body.data).to.have.property('accountId', accountId);
+    expect(res.body.data).to.have.property('isServiceAccount', true);
 
     const decrypted = await decryptBySdk(res.body.data.encryptedWallet);
 
@@ -155,7 +158,7 @@ describe('HTTP Status Code Tests', function () {
 
     expect(decryptedWallet).to.not.have.property('mnemonic');
     expect(decryptedWallet).to.have.property('privateKey', privateKey);
-    expect(decryptedWallet).to.have.property('email', email);
+    expect(decryptedWallet).to.have.property('accountId', accountId);
     expect(decryptedWallet).to.have.property('ethereumAddress', ethereumAddress);
     expect(decryptedWallet).to.have.property('isServiceAccount', true);
   });

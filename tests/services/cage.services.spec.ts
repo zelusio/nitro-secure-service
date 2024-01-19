@@ -56,9 +56,9 @@ describe('Cage Service Tests', function () {
     const ethereumAddress = '0x001';
     const mnemonic = 'one two three four five six seven eight nine ten eleven twelve';
     const privateKey = '0x002';
-    const email = 'test@email.com';
+    const accountId = 'account_123';
 
-    const res = await encryptWalletForService({ ethereumAddress, mnemonic, privateKey, email });
+    const res = await encryptWalletForService({ ethereumAddress, mnemonic, privateKey, accountId });
 
     expect(res).to.have.property('encryptedWallet');
 
@@ -69,16 +69,16 @@ describe('Cage Service Tests', function () {
     expect(decryptedWallet.ethereumAddress).to.eq(ethereumAddress);
     expect(decryptedWallet.mnemonic).to.eq(mnemonic);
     expect(decryptedWallet.privateKey).to.eq(privateKey);
-    expect(decryptedWallet.email).to.eq(email);
+    expect(decryptedWallet.accountId).to.eq(accountId);
     expect(decryptedWallet.isServiceAccount).to.eq(true);
   });
 
   it('encryptWalletForService should ok without mnemonic', async function () {
     const ethereumAddress = '0x001';
     const privateKey = '0x002';
-    const email = 'test@email.com';
+    const accountId = 'account_123';
 
-    const res = await encryptWalletForService({ ethereumAddress, privateKey, email });
+    const res = await encryptWalletForService({ ethereumAddress, privateKey, accountId });
 
     expect(res).to.have.property('encryptedWallet');
 
@@ -89,7 +89,7 @@ describe('Cage Service Tests', function () {
     expect(decryptedWallet.ethereumAddress).to.eq(ethereumAddress);
     expect(decryptedWallet.mnemonic).to.eq(undefined);
     expect(decryptedWallet.privateKey).to.eq(privateKey);
-    expect(decryptedWallet.email).to.eq(email);
+    expect(decryptedWallet.accountId).to.eq(accountId);
     expect(decryptedWallet.isServiceAccount).to.eq(true);
   });
 });

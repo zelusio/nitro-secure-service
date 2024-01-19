@@ -26,7 +26,7 @@ export interface IWalletServiceData {
   ethereumAddress: string;
   mnemonic?: string;
   privateKey: string;
-  email: string;
+  accountId: string;
 }
 
 export interface IDecryptedWalletService extends IWalletServiceData {

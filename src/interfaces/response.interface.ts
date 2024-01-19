@@ -14,3 +14,10 @@ export interface IResponseError {
   message: string;
   code: string;
 }
+
+export interface IResponseWalletCreateService {
+  accountId: string;
+  ethereumAddress: string;
+  encryptedWallet: string;
+  isServiceAccount: boolean;
+}
