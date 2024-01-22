@@ -1,0 +1,17 @@
+# top-most EditorConfig file
+root = true
+
+# matches all typescript files
+[**.ts]
+charset=utf-8
+end_of_line=lf
+trim_trailing_whitespace=true
+insert_final_newline=true
+indent_style=space
+indent_size=2
+max_line_length=120
+
+# json and yml files
+[{*.json,*.yml}]
+indent_style=space
+indent_size=2
