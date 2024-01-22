@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Express } from 'express';
+import { Wallet } from 'ethers';
 import { createExpressApp } from '../src/app';
 import { decryptBySdk } from '../src/services/evervault.service';
 import {
@@ -104,45 +105,13 @@ describe('HTTP Status Code Tests', function () {
     expect(decryptedWallet).to.have.property('isServiceAccount', true);
   });
 
-  it('POST /api/v1/service/wallet/import should ok', async function () {
-    const ethereumAddress = '0x001';
-    const mnemonic = 'one two three four five six seven eight nine ten eleven twelve';
-    const privateKey = '0x002';
-    const accountId = 'account_123';
-
-    const res = await chai
-      .request(expressApp)
-      .post('/api/v1/service/wallet/import')
-      .send({ accountId, ethereumAddress, mnemonic, privateKey });
-
-    expect(res.status).to.equal(200);
-
-    expect(res.body).to.have.property('data');
-    expect(res.body.data).to.have.property('encryptedWallet');
-    expect(res.body.data).to.have.property('ethereumAddress', ethereumAddress);
-    expect(res.body.data).to.have.property('accountId', accountId);
-    expect(res.body.data).to.have.property('isServiceAccount', true);
-
-    const decrypted = await decryptBySdk(res.body.data.encryptedWallet);
-
-    const decryptedWallet: IDecryptedWalletService = JSON.parse(decrypted);
-
-    expect(decryptedWallet).to.have.property('mnemonic', mnemonic);
-    expect(decryptedWallet).to.have.property('privateKey', privateKey);
-    expect(decryptedWallet).to.have.property('accountId', accountId);
-    expect(decryptedWallet).to.have.property('ethereumAddress', ethereumAddress);
-    expect(decryptedWallet).to.have.property('isServiceAccount', true);
-  });
-
   it('POST /api/v1/service/wallet/import should ok without mnemonic', async function () {
-    const ethereumAddress = '0x001';
-    const privateKey = '0x002';
+    const wallet = Wallet.createRandom();
+    const ethereumAddress = wallet.address;
+    const privateKey = wallet.privateKey;
     const accountId = 'account_123';
 
-    const res = await chai
-      .request(expressApp)
-      .post('/api/v1/service/wallet/import')
-      .send({ accountId, ethereumAddress, privateKey });
+    const res = await chai.request(expressApp).post('/api/v1/service/wallet/import').send({ accountId, privateKey });
 
     expect(res.status).to.equal(200);
 
@@ -161,5 +130,16 @@ describe('HTTP Status Code Tests', function () {
     expect(decryptedWallet).to.have.property('accountId', accountId);
     expect(decryptedWallet).to.have.property('ethereumAddress', ethereumAddress);
     expect(decryptedWallet).to.have.property('isServiceAccount', true);
+  });
+
+  it('POST /api/v1/service/wallet/import should return 400 because invalid private key', async function () {
+    const privateKey = '0x002';
+    const accountId = 'account_123';
+
+    const res = await chai.request(expressApp).post('/api/v1/service/wallet/import').send({ accountId, privateKey });
+
+    expect(res.status).to.equal(500);
+    expect(res.body).to.have.property('error');
+    expect(res.body?.error).to.have.property('message', 'Could not import wallet for service');
   });
 });

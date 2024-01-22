@@ -17,3 +17,8 @@ export function createWallet(): IDecryptedWallet {
 
   return { ethereumAddress, mnemonic, privateKey };
 }
+
+export function getAddressFromPrivateKey(privateKey: string): string {
+  const wallet = new Wallet(privateKey);
+  return wallet.address;
+}

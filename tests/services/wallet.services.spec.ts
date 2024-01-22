@@ -1,10 +1,11 @@
 import { expect } from 'chai';
-import { createWallet } from '../../src/services/wallet.service';
+import { createWallet, getAddressFromPrivateKey } from '../../src/services/wallet.service';
 import { IDecryptedWallet } from '../../src/interfaces/wallet.interface';
+import { Wallet } from 'ethers';
 
 describe('Wallet Service Tests', function () {
-  it('Create wallet should ok', async function () {
-    const res: IDecryptedWallet = await createWallet();
+  it('Create wallet should ok', function () {
+    const res: IDecryptedWallet = createWallet();
 
     expect(res.ethereumAddress).not.eq(undefined);
     expect(res.ethereumAddress.length).eq(42);
@@ -13,5 +14,13 @@ describe('Wallet Service Tests', function () {
     expect(res.mnemonic.split(' ').length).eq(12);
 
     expect(res.privateKey).not.eq(undefined);
+  });
+
+  it('Should return ethereum address for private key', function () {
+    const wallet = Wallet.createRandom();
+
+    const result: string = getAddressFromPrivateKey(wallet.privateKey);
+
+    expect(result).to.equal(wallet.address);
   });
 });

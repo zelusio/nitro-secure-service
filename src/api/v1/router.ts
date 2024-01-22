@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { createWallet } from '../../services/wallet.service';
+import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service';
 import { IDecryptedWallet, IEncryptedWallet } from '../../interfaces/wallet.interface';
 import { encryptWalletForService, encryptWalletWithEmail, encryptWalletWithPhone } from '../../services/cage.service';
 import loggingService from '../../services/logging.service';
@@ -114,11 +114,12 @@ router.post('/service/wallet', async (req: Request, res: Response) => {
 // ENCRYPT IMPORTED WALLET FOR SERVICE WALLET
 router.post('/service/wallet/import', async (req: Request, res: Response) => {
   try {
-    const { accountId, ethereumAddress, mnemonic, privateKey } = req.body;
+    const { accountId, privateKey } = req.body;
+
+    const ethereumAddress = getAddressFromPrivateKey(privateKey);
 
     const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
       ethereumAddress,
-      mnemonic,
       privateKey,
       accountId
     });
