@@ -21,3 +21,7 @@ export interface IResponseWalletCreateService {
   encryptedWallet: string;
   isServiceAccount: boolean;
 }
+
+export interface IResponseSignedTransaction {
+  signedTransaction: string;
+}

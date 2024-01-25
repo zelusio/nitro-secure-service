@@ -8,13 +8,14 @@ import {
   IEncryptedWallet,
   IWalletServiceData
 } from '../interfaces/wallet.interface';
-import { encryptBySdk } from './evervault.service';
+import { encryptBySdk, decryptBySdk } from './evervault.service';
 import loggingService from './logging.service';
 
 dotenv.config();
 
 const { ENVIRONMENT } = process.env;
 const CAGE_ENCRYPT_URL = 'http://127.0.0.1:9999/encrypt';
+const CAGE_DECRYPT_URL = 'http://127.0.0.1:9999/decrypt';
 
 export async function encryptByCage(text: string): Promise<string> {
   if (ENVIRONMENT === 'test') {
@@ -24,6 +25,16 @@ export async function encryptByCage(text: string): Promise<string> {
   const result = await axios.post(CAGE_ENCRYPT_URL, { text });
 
   return result.data.text;
+}
+
+export async function decryptByCage(encryptedText: string): Promise<string> {
+  if (ENVIRONMENT === 'test') {
+    return await decryptBySdk(encryptedText);
+  }
+
+  const result = await axios.post(CAGE_DECRYPT_URL, encryptedText);
+
+  return result.data;
 }
 
 export async function encryptWalletWithEmail(
@@ -94,4 +105,15 @@ export async function encryptWalletForService({
   }
 
   return { encryptedWallet };
+}
+
+export async function decryptWalletForService(encryptedWalletData: IEncryptedWallet): Promise<IDecryptedWalletService> {
+  const decryptedText = await decryptByCage(encryptedWalletData.encryptedWallet);
+  try {
+    const decryptedWallet = JSON.parse(decryptedText) as IDecryptedWalletService;
+    return decryptedWallet;
+  } catch (err: any) {
+    loggingService.error('Could not parse encrypted data');
+    throw new Error('Could not parse encrypted data');
+  }
 }
