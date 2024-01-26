@@ -1,10 +1,17 @@
 import { Request, Response, Router } from 'express';
+import { ethers } from 'ethers';
 import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service';
-import { IDecryptedWallet, IEncryptedWallet } from '../../interfaces/wallet.interface';
-import { encryptWalletForService, encryptWalletWithEmail, encryptWalletWithPhone } from '../../services/cage.service';
+import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface';
+import {
+  decryptWalletForService,
+  encryptWalletForService,
+  encryptWalletWithEmail,
+  encryptWalletWithPhone
+} from '../../services/cage.service';
 import loggingService from '../../services/logging.service';
 import {
   IResponseError,
+  IResponseSignedTransaction,
   IResponseWalletCreateEmail,
   IResponseWalletCreatePhone,
   IResponseWalletCreateService
@@ -137,6 +144,41 @@ router.post('/service/wallet/import', async (req: Request, res: Response) => {
 
     const error: IResponseError = {
       message: 'Could not import wallet for service',
+      code: ERROR_CODES.INTERNAL_ERROR
+    };
+
+    return res.status(500).send({ error });
+  }
+});
+
+router.post('/transaction/sign', async (req: Request, res: Response) => {
+  try {
+    const { accountId, transaction, encryptedWallet } = req.body;
+
+    const decryptedWallet: IDecryptedWalletService = await decryptWalletForService({ encryptedWallet });
+
+    if (!(decryptedWallet.isServiceAccount && accountId === decryptedWallet.accountId)) {
+      return res.status(400).send({
+        error: {
+          message: 'Not valid account',
+          code: ERROR_CODES.BAD_REQUEST
+        }
+      });
+    }
+    const unsignedTx = ethers.Transaction.from(transaction);
+    const signerWallet = new ethers.Wallet(decryptedWallet.privateKey);
+    const signedTransaction = await signerWallet.signTransaction(unsignedTx);
+
+    const data: IResponseSignedTransaction = {
+      signedTransaction
+    };
+
+    return res.status(200).send({ data });
+  } catch (err: any) {
+    loggingService.error('Could not sign transaction', err.message);
+
+    const error: IResponseError = {
+      message: err.message || 'Could not sign transaction',
       code: ERROR_CODES.INTERNAL_ERROR
     };
 
