@@ -27,14 +27,14 @@ export async function encryptByCage(text: string): Promise<string> {
   return result.data.text;
 }
 
-export async function decryptByCage(encryptedText: string): Promise<string> {
+export async function decryptByCage(text: string): Promise<string> {
   if (ENVIRONMENT === 'test') {
-    return await decryptBySdk(encryptedText);
+    return await decryptBySdk(text);
   }
 
-  const result = await axios.post(CAGE_DECRYPT_URL, encryptedText);
+  const result = await axios.post(CAGE_DECRYPT_URL, { text });
 
-  return result.data;
+  return result.data.text;
 }
 
 export async function encryptWalletWithEmail(
