@@ -1,0 +1,30 @@
+version = 1
+name = "nitro-secure-service-dev"
+uuid = "cage_49cd44b168a0"
+app_uuid = "app_b81dd8dc1c0d"
+team_uuid = "team_e59a7c8b0849"
+debug = false
+dockerfile = "./Dockerfile"
+api_key_auth = true
+trx_logging = true
+tls_termination = true
+forward_proxy_protocol = false
+trusted_headers = []
+
+[egress]
+enabled = false
+
+[signing]
+certPath = "./cert.pem"
+keyPath = "./key.pem"
+
+[attestation]
+HashAlgorithm = "Sha384 { ... }"
+PCR0 = "57a851cd23e1052637303bbd0a535eea94acf0089d9cf99ed4c5667c57508d63df5178dc88a55f51cc9ad5b758231e8d"
+PCR1 = "bcdf05fefccaa8e55bf2c8d6dee9e79bbff31e34bf28a99aa19e6b29c37ee80b214a414b7607236edf26fcb78654e63f"
+PCR2 = "9a513cad32c0ca4eddf5c3710d149f6d12d08d74f9b263282395fd212c6b23cd02883b6d381e722abffae02d067d1837"
+PCR8 = "d00f3481190e86c7a0bf2fcfbad9220bf7f7667c392cb0269d70877a286b7374cb4b26bfc0d11f34374c8bfd09e374e7"
+
+[runtime]
+data_plane_version = "0.0.37"
+installer_version = "b8073166b7c5bc8fe2abf192f66e1106f2d4be547b1841be69f95ff2c4ea578c"
