@@ -1,7 +1,7 @@
 name: Deploy Dev Cage
 
 env:
-  TOML_FILE_NAME: 'cage.dev.toml'
+  TOML_FILE_NAME: 'enclave.dev.toml'
   STAGE: dev
 
 on:
@@ -25,10 +25,10 @@ jobs:
           EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
 
         run: |
-          sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
+          curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev-cage deploy -c $TOML_FILE_NAME
+          ev-enclave deploy -c $TOML_FILE_NAME
 
       - name: Save PCR Attestations to Artifacts
         uses: actions/upload-artifact@v3
