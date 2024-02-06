@@ -10,6 +10,7 @@ on:
       - .github/workflows/deploy-prod-cage.yml
       - src/**/*
       - cage.prod.toml
+      - enclave.prod.toml
     branches:
       - master
 

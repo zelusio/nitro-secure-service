@@ -10,6 +10,7 @@ on:
       - .github/workflows/deploy-dev-cage.yml
       - src/**/*
       - cage.dev.toml
+      - enclave.dev.toml
     branches:
       - develop
 
