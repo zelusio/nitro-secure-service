@@ -1,12 +1,13 @@
-name = "nitro-secure-service-dev"
-uuid = "cage_49cd44b168a0"
-app_uuid = "app_b81dd8dc1c0d"
+version = 1
+name = "nitro-secure-service-staging"
+uuid = "cage_429c6f3ba413"
+app_uuid = "app_a6f793e80534"
 team_uuid = "team_e59a7c8b0849"
 debug = false
 dockerfile = "./Dockerfile"
 api_key_auth = true
 trx_logging = true
-disable_tls_termination = false
+tls_termination = true
 forward_proxy_protocol = false
 trusted_headers = []
 
