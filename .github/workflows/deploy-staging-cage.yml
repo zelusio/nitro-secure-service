@@ -1,7 +1,7 @@
 name: Deploy Staging Cage
 
 env:
-  TOML_FILE_NAME: 'cage.staging.toml'
+  TOML_FILE_NAME: 'enclave.staging.toml'
   STAGE: staging
 
 on:
@@ -10,6 +10,7 @@ on:
       - .github/workflows/deploy-staging-cage.yml
       - src/**/*
       - cage.staging.toml
+      - enclave.staging.toml
     branches:
       - staging
 
@@ -25,10 +26,10 @@ jobs:
           EV_KEY: ${{ secrets.STAGING_EVERVAULT_KEY }}
 
         run: |
-          sh <(curl https://cage-build-assets.evervault.com/cli/install -sL)
+          curl https://enclave-build-assets.evervault.com/cli/v1/1.0.3/install -sL | sh
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev-cage deploy -c $TOML_FILE_NAME
+          ev-enclave deploy -c $TOML_FILE_NAME
 
       - name: Save PCR Attestations
         uses: actions/upload-artifact@v3

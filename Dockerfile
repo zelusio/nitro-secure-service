@@ -1,25 +1,23 @@
-FROM node:18-alpine AS builder
+FROM node:18.19.0-alpine AS builder
 
 WORKDIR /usr/app
-COPY package.json .
 COPY tsconfig.json .
-COPY yarn.lock .
-RUN yarn install
+COPY package*.json ./
+RUN npm install
 
 # set up source
 COPY ./src ./src
-RUN yarn run build
+RUN npm run build
 
-FROM node:18-slim
+FROM node:18.19.0-slim
 
 WORKDIR /usr/app
 RUN chown node:node .
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install --production
+COPY --from=builder /usr/app/package*.json .
+RUN npm install --production
 COPY --from=builder /usr/app/dist ./dist
 
 # remove because it breaks evervault
 # USER node
 EXPOSE 3000
-CMD yarn run start
+CMD npm run start
