@@ -23,6 +23,7 @@ jobs:
       - name: Deploy Dev Cage
         env:
           EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
+          EV_APP_UUID: ${{ secrets.DEV_EVERVAULT_APP_UUID }}
           EV_CERT: ${{ secrets.DEV_EVERVAULT_CERT }}
           EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
 

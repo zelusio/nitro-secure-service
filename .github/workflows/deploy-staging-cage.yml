@@ -23,6 +23,7 @@ jobs:
       - name: Deploy Staging Cage
         env:
           EV_API_KEY: ${{ secrets.STAGING_EVERVAULT_API_KEY }}
+          EV_APP_UUID: ${{ secrets.STAGING_EVERVAULT_APP_UUID }}
           EV_CERT: ${{ secrets.STAGING_EVERVAULT_CERT }}
           EV_KEY: ${{ secrets.STAGING_EVERVAULT_KEY }}
 
