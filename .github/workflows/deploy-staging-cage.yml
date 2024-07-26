@@ -11,6 +11,7 @@ on:
       - src/**/*
       - cage.staging.toml
       - enclave.staging.toml
+      - package*
     branches:
       - staging
 
