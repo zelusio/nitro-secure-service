@@ -27,16 +27,16 @@ jobs:
           EV_KEY: ${{ secrets.DEV_EVERVAULT_KEY }}
 
         run: |
-          curl https://enclave-build-assets.evervault.com/cli/v1/1.0.3/install -sL | sh
+          sh <(curl https://cli.evervault.com/v4/install -sL)
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev-enclave deploy -c $TOML_FILE_NAME
+          ev enclave deploy -c $TOML_FILE_NAME
 
       - name: Save PCR Attestations to Artifacts
         uses: actions/upload-artifact@v3
         with:
-            name: pcr-attestations
-            path: ${{ env.TOML_FILE_NAME }}
+          name: pcr-attestations
+          path: ${{ env.TOML_FILE_NAME }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
