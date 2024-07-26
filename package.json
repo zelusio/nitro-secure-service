@@ -15,7 +15,7 @@
     "prettier": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'"
   },
   "dependencies": {
-    "@evervault/sdk": "^4.0.0",
+    "@evervault/sdk": "^4.3.0",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",
