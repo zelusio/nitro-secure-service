@@ -15,6 +15,7 @@ export class JWKService {
 
   private readonly keyStore: jose.JWK.KeyStore;
   private readonly keyIds: string[] = [];
+  private keyRotationInterval: NodeJS.Timeout | undefined;
 
   /**
    * The private constructor, to be called by the singleton constructor {@link getInstance} with a keystore instance
@@ -45,6 +46,21 @@ export class JWKService {
       logService.debug('Finished generating new keys!');
 
       JWKService.instance = new JWKService(keystore);
+
+      // add interval to rotate keys on instance creation
+      JWKService.instance.keyRotationInterval = setInterval(
+        () =>
+          JWKService.getInstance()
+            .then(jwkService => {
+              return jwkService.rotateKeys();
+            })
+            .then(() => logService.log('JWKService rotated keys!'))
+            .catch((err: unknown) => {
+              logService.log('An error occurred while the JWKService was rotating keys!');
+              logService.error(err);
+            }),
+        KEY_ROTATION_INTERVAL
+      );
     }
 
     return JWKService.instance;
@@ -97,19 +113,5 @@ export class JWKService {
     }
   }
 }
-
-setInterval(
-  () =>
-    JWKService.getInstance()
-      .then(jwkService => {
-        return jwkService.rotateKeys();
-      })
-      .then(() => logService.log('JWKService rotated keys!'))
-      .catch((err: unknown) => {
-        logService.log('An error occurred while the JWKService was rotating keys!');
-        logService.error(err);
-      }),
-  KEY_ROTATION_INTERVAL
-);
 
 export default JWKService;
