@@ -16,7 +16,6 @@ describe('Well-Known API Tests', function () {
     const res = await chai.request(expressApp).get('/.well-known/jwks.json');
 
     expect(res.status).to.equal(200);
-    expect(res.body).to.be.lengthOf(1);
     expect(res.body[0]).to.have.property('kty');
     expect(res.body[0]).to.have.property('kid');
     expect(res.body[0]).to.have.property('use');

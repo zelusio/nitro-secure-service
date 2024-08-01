@@ -1,6 +1,8 @@
 import jose from 'node-jose';
 import logService from './logging.service';
 
+const KEY_ROTATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+
 /**
  * @class JWKService
  * @description This service handles managing JSON Web Keys (JWK) for the rest of the application. It handles loading them, rotating them, and making them available to the rest of the application in a **protected** manner
@@ -35,14 +37,12 @@ export class JWKService {
 
       // TODO: where should be stored keys (external storage)?
 
-      logService.debug(`Generating new keys...`);
+      logService.debug('Generating new keys...');
       await keystore.generate('RSA', 2048, {
         alg: 'RS256',
         use: 'sig'
       });
-      logService.debug(`Finished generating new keys!`);
-
-      // TODO: what about key rotation?
+      logService.debug('Finished generating new keys!');
 
       JWKService.instance = new JWKService(keystore);
     }
@@ -55,7 +55,7 @@ export class JWKService {
    * @returns {jose.JWK.Key[]}
    */
   public getKeys(): jose.JWK.Key[] {
-    return this.keyStore.all();
+    return this.keyStore.all().map((key: jose.JWK.Key) => key.toJSON() as jose.JWK.Key);
   }
 
   /**
@@ -76,6 +76,40 @@ export class JWKService {
   public findKey(kid: string, kty: string, alg: string): jose.JWK.Key | undefined {
     return this.keyStore.get({ kid, kty, alg })?.toJSON(true) as jose.JWK.Key;
   }
+
+  public async rotateKeys(): Promise<void> {
+    const newKey = await this.keyStore.generate('RSA', 2048, {
+      alg: 'RS256',
+      use: 'sig'
+    });
+
+    // put new key in front
+    this.keyIds.unshift(newKey.kid);
+
+    // keep only the last 2 keys
+    if (this.keyIds.length > 2) {
+      // get the last key from the id list
+      const keyId = this.keyIds.pop() as string;
+      const keyToRemove = this.keyStore.get(keyId);
+      if (keyToRemove) {
+        this.keyStore.remove(keyToRemove);
+      }
+    }
+  }
 }
+
+setInterval(
+  () =>
+    JWKService.getInstance()
+      .then(jwkService => {
+        return jwkService.rotateKeys();
+      })
+      .then(() => logService.log('JWKService rotated keys!'))
+      .catch((err: unknown) => {
+        logService.log('An error occurred while the JWKService was rotating keys!');
+        logService.error(err);
+      }),
+  KEY_ROTATION_INTERVAL
+);
 
 export default JWKService;
