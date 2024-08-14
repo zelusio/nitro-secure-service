@@ -5,7 +5,7 @@ describe('JWK Service Tests', function () {
   it('Should return created one key', async function () {
     const jwkService = await JWKService.getInstance();
 
-    const keys = jwkService.getKeys();
+    const keys = jwkService.getPublicKeys();
 
     expect(keys).to.be.lengthOf(1);
     expect(keys[0]).to.have.property('kty');
@@ -21,7 +21,7 @@ describe('JWK Service Tests', function () {
 
     await jwkService.rotateKeys();
 
-    const keys = jwkService.getKeys();
+    const keys = jwkService.getPublicKeys();
 
     expect(keys).to.be.lengthOf(2);
     expect(keys[0]).to.have.property('kty');
@@ -38,7 +38,7 @@ describe('JWK Service Tests', function () {
     await jwkService.rotateKeys();
     await jwkService.rotateKeys();
 
-    const keys = jwkService.getKeys();
+    const keys = jwkService.getPublicKeys();
 
     expect(keys).to.be.lengthOf(2);
   });

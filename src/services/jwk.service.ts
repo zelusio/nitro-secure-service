@@ -1,5 +1,6 @@
 import jose from 'node-jose';
 import logService from './logging.service';
+import * as jwkExternalStore from './jwkExternalStore.service';
 
 const KEY_ROTATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -36,14 +37,24 @@ export class JWKService {
       // create a keystore
       const keystore = jose.JWK.createKeyStore();
 
-      // TODO: where should be stored keys (external storage)?
+      logService.debug(`Looking for JWK keys in external storage...`);
+      const keys = await jwkExternalStore.getKeys();
 
-      logService.debug('Generating new keys...');
-      await keystore.generate('RSA', 2048, {
-        alg: 'RS256',
-        use: 'sig'
-      });
-      logService.debug('Finished generating new keys!');
+      if (keys && keys.length > 0) {
+        logService.debug(`Found ${keys.length} JWK keys in external storage!`);
+        await Promise.all(keys.map(key => keystore.add(key, 'json')));
+        logService.debug('Finished adding keys to keystore from external storage');
+      } else {
+        logService.debug('Not found any JWK keys in external storage. Generating new keys...');
+        await keystore.generate('RSA', 2048, {
+          alg: 'RS256',
+          use: 'sig'
+        });
+        logService.debug('Finished generating new keys!');
+        const newKeys = keystore.all().map((key: jose.JWK.Key) => key.toJSON(true) as jose.JWK.Key);
+        await jwkExternalStore.saveKeys(newKeys);
+        logService.debug('Finished saving new keys to external storage!');
+      }
 
       JWKService.instance = new JWKService(keystore);
 
@@ -70,8 +81,8 @@ export class JWKService {
    * Return the **public** portion of all keys in the keystore
    * @returns {jose.JWK.Key[]}
    */
-  public getKeys(): jose.JWK.Key[] {
-    return this.keyStore.all().map((key: jose.JWK.Key) => key.toJSON() as jose.JWK.Key);
+  public getPublicKeys(): jose.JWK.Key[] {
+    return this.keyStore.all().map((key: jose.JWK.Key) => key.toJSON(false) as jose.JWK.Key);
   }
 
   /**
@@ -111,6 +122,10 @@ export class JWKService {
         this.keyStore.remove(keyToRemove);
       }
     }
+
+    const newKeys = this.keyStore.all().map((key: jose.JWK.Key) => key.toJSON(true) as jose.JWK.Key);
+    await jwkExternalStore.saveKeys(newKeys);
+    logService.debug('Finished saving new keys to external storage!');
   }
 }
 

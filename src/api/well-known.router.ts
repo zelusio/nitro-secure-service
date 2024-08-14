@@ -51,6 +51,6 @@ router.get('/jwks.json', getPublicJWKs);
 
 async function getPublicJWKs(request: Request, response: Response) {
   const keyServiceInstance = await JWKService.getInstance();
-  const publicKeys = keyServiceInstance.getKeys();
+  const publicKeys = keyServiceInstance.getPublicKeys();
   return response.status(200).json(publicKeys);
 }
