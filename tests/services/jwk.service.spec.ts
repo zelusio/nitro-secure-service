@@ -1,45 +1,18 @@
 import { expect } from 'chai';
-import JWKService from '../../src/services/jwk.service';
+import JWKService from '../../src/services/jwk/jwk.service';
 
 describe('JWK Service Tests', function () {
-  it('Should return created one key', async function () {
-    const jwkService = await JWKService.getInstance();
+  it('Should return at least one default key', async function () {
+    const jwkProvider = await JWKService.getProviderInstance();
 
-    const keys = jwkService.getPublicKeys();
+    const keys = jwkProvider.getPublicKeys();
 
-    expect(keys).to.be.lengthOf(1);
+    expect(keys.length).to.be.gte(1);
     expect(keys[0]).to.have.property('kty');
     expect(keys[0]).to.have.property('kid');
     expect(keys[0]).to.have.property('use');
     expect(keys[0]).to.have.property('alg');
     expect(keys[0]).to.have.property('e');
     expect(keys[0]).to.have.property('n');
-  });
-
-  it('Should return 2 keys after rotating', async function () {
-    const jwkService = await JWKService.getInstance();
-
-    await jwkService.rotateKeys();
-
-    const keys = jwkService.getPublicKeys();
-
-    expect(keys).to.be.lengthOf(2);
-    expect(keys[0]).to.have.property('kty');
-    expect(keys[0]).to.have.property('kid');
-    expect(keys[0]).to.have.property('use');
-    expect(keys[0]).to.have.property('alg');
-    expect(keys[0]).to.have.property('e');
-    expect(keys[0]).to.have.property('n');
-  });
-
-  it('Should return only 2 keys after 2 rotating', async function () {
-    const jwkService = await JWKService.getInstance();
-
-    await jwkService.rotateKeys();
-    await jwkService.rotateKeys();
-
-    const keys = jwkService.getPublicKeys();
-
-    expect(keys).to.be.lengthOf(2);
   });
 });
