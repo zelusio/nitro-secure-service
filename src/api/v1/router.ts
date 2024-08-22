@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
+import { requireJWT, requireScope, Scope, JWTMiddlewareOptions } from '@zelusio/auth-lib';
 import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service';
 import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface';
 import {
@@ -20,6 +21,20 @@ import { ERROR_CODES } from '../../constants/errors';
 
 const router: Router = Router();
 export default router;
+
+const jwtMiddlewareOptions: JWTMiddlewareOptions = {
+  jwtOptions: {
+    jwksUrl: `${process.env.AUTH_API_URL}/.well-known/jwks.json`,
+    issuer: process.env.AUTH_ISSUER || ''
+  },
+  transformErrorResponse: (err: unknown) => {
+    const error: IResponseError = {
+      message: err instanceof Error ? err.message : (err as string),
+      code: ERROR_CODES.UNAUTHORIZED
+    };
+    return { body: { error } };
+  }
+};
 
 router.get('/version', (req: Request, res: Response) => {
   return res.json({ version: '1' });
@@ -83,6 +98,16 @@ router.post('/wallet', async (req: Request, res: Response) => {
     return res.status(500).send({ error });
   }
 });
+
+router.post(
+  '/wallet/export',
+  requireJWT(jwtMiddlewareOptions),
+  requireScope({ scopes: [Scope.InvisibleWalletExport], ...jwtMiddlewareOptions }),
+  async (req: Request, res: Response) => {
+    // TODO: method will be implemented within the scope of another ticket
+    return res.status(501).send({ message: 'Not implemented' });
+  }
+);
 
 // CREATE NEW WALLET AND ENCRYPT FOR SERVICE ACCOUNT
 router.post('/service/wallet', async (req: Request, res: Response) => {
