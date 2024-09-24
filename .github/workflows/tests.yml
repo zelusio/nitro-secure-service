@@ -14,7 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.CDK_DEPLOYMENT_AMAZON_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.CDK_DEPLOYMENT_AMAZON_SECRET_KEY }}
+          aws-region: 'us-east-1'
 
       - name: Install Dependencies
         id: install-deps
@@ -33,7 +45,7 @@ jobs:
     name: Try Building Dockerfile
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Dockerfile
         env:
           ENVIRONMENT: test
