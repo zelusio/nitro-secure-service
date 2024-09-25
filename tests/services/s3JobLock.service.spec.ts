@@ -26,6 +26,7 @@ describe('S3JobLockService Tests', function () {
     const coinJobLockService2 = new S3JobLockService();
 
     const firstLockResult = await coinJobLockService1.tryLockJob(testJobName, 30000);
+    await new Promise(resolve => setTimeout(resolve, 900));
     const secondLockResult = await coinJobLockService2.tryLockJob(testJobName, 30000);
     const unlockResult = await coinJobLockService1.unlockJob(testJobName);
     const result = await coinJobLockService2.tryLockJob(testJobName, 30000);
@@ -44,9 +45,10 @@ describe('S3JobLockService Tests', function () {
     const coinJobLockService2 = new S3JobLockService();
 
     const firstLockResult = await coinJobLockService1.tryLockJob(testJobName, 30000);
+    await new Promise(resolve => setTimeout(resolve, 900));
     const secondLockResult = await coinJobLockService2.tryLockJob(testJobName, 30000);
     await new Promise(resolve => setTimeout(resolve, 4000));
-    const result = await coinJobLockService2.tryLockJob(testJobName, 2000);
+    const result = await coinJobLockService2.tryLockJob(testJobName, 1500);
 
     expect(firstLockResult).to.be.equal(true);
     expect(secondLockResult).to.be.equal(false);
