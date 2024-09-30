@@ -32,10 +32,18 @@ export class S3JobLockService {
     );
 
     // get first element in expirationTime window
+    // warning: S3 stores LastModified in seconds, for example: 2024-09-24T13:25:40.000Z
     const firstInWindow = locksList.Contents?.filter(
       item => (item.LastModified as Date).valueOf() > Date.now() - expirationTime
     )
-      .sort((a, b) => (a.LastModified as Date).valueOf() - (b.LastModified as Date).valueOf())
+      .sort((a, b) => {
+        const aModified = (a.LastModified as Date).valueOf();
+        const bModified = (b.LastModified as Date).valueOf();
+        if (aModified === bModified) {
+          return (a.ETag as string).localeCompare(b.ETag as string);
+        }
+        return aModified - bModified;
+      })
       .shift();
 
     if (firstInWindow?.ETag === data.ETag) {
