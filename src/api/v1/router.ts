@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
-import { requireJWT, requireScope, Scope, JWTMiddlewareOptions } from '@zelusio/auth-lib';
+import { requireJWT, requireScope, Scope, JWTMiddlewareOptions, verifyJWT } from '@zelusio/auth-lib';
 import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service';
 import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface';
 import {
   decryptWalletForService,
+  decryptWalletWithEmail,
   encryptWalletForService,
   encryptWalletWithEmail,
   encryptWalletWithPhone
@@ -18,14 +19,16 @@ import {
   IResponseWalletCreateService
 } from '../../interfaces/response.interface';
 import { ERROR_CODES } from '../../constants/errors';
+import { encryptByPublicKey, getEncryptedWallet } from '../../services/exportWallet.service';
+import { secrets } from '../../services/secrets.service';
 
 const router: Router = Router();
 export default router;
 
 const jwtMiddlewareOptions: JWTMiddlewareOptions = {
   jwtOptions: {
-    jwksUrl: `${process.env.AUTH_API_URL}/.well-known/jwks.json`,
-    issuer: process.env.AUTH_ISSUER || ''
+    jwksUrl: `${secrets.AUTH_API_URL}/.well-known/jwks.json`,
+    issuer: secrets.AUTH_ISSUER || ''
   },
   transformErrorResponse: (err: unknown) => {
     const error: IResponseError = {
@@ -99,13 +102,46 @@ router.post('/wallet', async (req: Request, res: Response) => {
   }
 });
 
+// EXPORT WALLET
 router.post(
   '/wallet/export',
   requireJWT(jwtMiddlewareOptions),
   requireScope({ scopes: [Scope.InvisibleWalletExport], ...jwtMiddlewareOptions }),
   async (req: Request, res: Response) => {
-    // TODO: method will be implemented within the scope of another ticket
-    return res.status(501).send({ message: 'Not implemented' });
+    try {
+      const { public_key } = req.body;
+
+      const authToken = (req.headers['authorization'] as string).split(' ')[1];
+
+      const payload = await verifyJWT(authToken, jwtMiddlewareOptions.jwtOptions);
+      const subject = payload.sub as string;
+      const email = payload.email as string;
+
+      const encryptedWalletText = await getEncryptedWallet(authToken, subject);
+      const decryptedWalletWithEmail = await decryptWalletWithEmail({ encryptedWallet: encryptedWalletText });
+
+      if (email !== decryptedWalletWithEmail.email) {
+        const error: IResponseError = {
+          message: 'Could not export wallet',
+          code: ERROR_CODES.FORBIDDEN
+        };
+
+        return res.status(403).send({ error });
+      }
+
+      const invisibleWallet = await encryptByPublicKey(public_key, JSON.stringify(decryptedWalletWithEmail));
+
+      return res.status(200).send({ data: { invisible_wallet: invisibleWallet } });
+    } catch (err: any) {
+      loggingService.error('Could not export wallet', err.message);
+
+      const error: IResponseError = {
+        message: 'Could not export wallet',
+        code: ERROR_CODES.INTERNAL_ERROR
+      };
+
+      return res.status(500).send({ error });
+    }
   }
 );
 
@@ -148,6 +184,15 @@ router.post('/service/wallet/import', async (req: Request, res: Response) => {
   try {
     const { accountId, privateKey } = req.body;
 
+    if (!accountId || !privateKey) {
+      return res.status(400).send({
+        error: {
+          message: 'Not provided accountId or privateKey',
+          code: ERROR_CODES.BAD_REQUEST
+        }
+      });
+    }
+
     const ethereumAddress = getAddressFromPrivateKey(privateKey);
 
     const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
@@ -163,7 +208,7 @@ router.post('/service/wallet/import', async (req: Request, res: Response) => {
       isServiceAccount: true
     };
 
-    return res.send({ data });
+    return res.status(200).send({ data });
   } catch (err: any) {
     loggingService.error('Could not import wallet for service', err.message);
 
