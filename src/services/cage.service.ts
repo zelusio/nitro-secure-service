@@ -1,6 +1,5 @@
 import axios from 'axios';
-import * as process from 'process';
-import dotenv from 'dotenv';
+import { secrets } from './secrets.service';
 import {
   IDecryptedWalletEmail,
   IDecryptedWalletPhone,
@@ -11,9 +10,7 @@ import {
 import { encryptBySdk, decryptBySdk } from './evervault.service';
 import loggingService from './logging.service';
 
-dotenv.config();
-
-const { ENVIRONMENT } = process.env;
+const { ENVIRONMENT } = secrets;
 const CAGE_ENCRYPT_URL = 'http://127.0.0.1:9999/encrypt';
 const CAGE_DECRYPT_URL = 'http://127.0.0.1:9999/decrypt';
 
@@ -113,7 +110,18 @@ export async function decryptWalletForService(encryptedWalletData: IEncryptedWal
     const decryptedWallet = JSON.parse(decryptedText) as IDecryptedWalletService;
     return decryptedWallet;
   } catch (err: any) {
-    loggingService.error('Could not parse encrypted data');
+    loggingService.error('Could not parse encrypted data', err?.message || err);
+    throw new Error('Could not parse encrypted data');
+  }
+}
+
+export async function decryptWalletWithEmail(encryptedWalletData: IEncryptedWallet): Promise<IDecryptedWalletEmail> {
+  const decryptedText = await decryptByCage(encryptedWalletData.encryptedWallet);
+  try {
+    const decryptedWallet = JSON.parse(decryptedText) as IDecryptedWalletEmail;
+    return decryptedWallet;
+  } catch (err: any) {
+    loggingService.error('Could not parse encrypted data', err?.message || err);
     throw new Error('Could not parse encrypted data');
   }
 }
