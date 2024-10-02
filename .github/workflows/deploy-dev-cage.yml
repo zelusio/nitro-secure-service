@@ -20,7 +20,12 @@ jobs:
   deploy-cage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .npmrc for access to GitHub Packages
+        run: echo -e "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}\n@zelusio:registry=https://npm.pkg.github.com/" > .npmrc
+
       - name: Deploy Dev Cage
         env:
           EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
