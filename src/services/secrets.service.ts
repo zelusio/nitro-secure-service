@@ -8,7 +8,6 @@ export interface ISecrets {
   EVERVAULT_API_KEY: string;
   AUTH_API_URL: string;
   AUTH_ISSUER: string;
-  NSS_API_URL: string;
   NSS_ISSUER: string;
   BUCKET_NAME?: string;
   S3_KEY?: string;
@@ -37,7 +36,6 @@ export const secrets: ISecrets = {
   EVERVAULT_API_KEY: requireEnv('EVERVAULT_API_KEY'),
   AUTH_API_URL: requireEnv('AUTH_API_URL', 'http://localhost:8000'),
   AUTH_ISSUER: requireEnv('AUTH_ISSUER', 'http://localhost:8000'),
-  NSS_API_URL: requireEnv('NSS_API_URL', 'http://localhost:3000'),
   NSS_ISSUER: requireEnv('NSS_ISSUER', 'http://localhost:3000'),
   BUCKET_NAME: process.env.BUCKET_NAME,
   S3_KEY: process.env.S3_KEY
