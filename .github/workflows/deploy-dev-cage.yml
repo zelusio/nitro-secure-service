@@ -37,7 +37,7 @@ jobs:
           sh <(curl https://cli.evervault.com/v4/install -sL)
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev enclave deploy -v -c $TOML_FILE_NAME
+          ev enclave deploy -v -c $TOML_FILE_NAME --build-secret id=npmrc,src=.npmrc
 
       - name: Save PCR Attestations to Artifacts
         uses: actions/upload-artifact@v4
