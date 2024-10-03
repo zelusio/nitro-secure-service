@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import { JWKService, JWTIssuer, Scope } from '@zelusio/auth-lib';
 import { createExpressApp } from '../src/app';
 import { encryptWalletWithEmail } from '../src/services/cage.service';
+import { secrets } from '../src/services/secrets.service';
 
 chai.use(chaiHttp);
 
@@ -42,7 +43,7 @@ describe('Wallet Export API Tests', function () {
     let jwtIssuer: JWTIssuer;
 
     before(async function () {
-      authApiUrl = process.env.AUTH_API_URL as string;
+      authApiUrl = secrets.AUTH_API_URL;
       jwkService = new JWKService();
       jwtIssuer = new JWTIssuer(authApiUrl, await jwkService.getDefaultPrivateKey());
 
