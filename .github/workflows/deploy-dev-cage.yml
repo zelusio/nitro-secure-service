@@ -14,7 +14,6 @@ on:
       - package*
     branches:
       - develop
-      - 'fix/deploy-enclave'
 
 jobs:
   deploy-cage:
