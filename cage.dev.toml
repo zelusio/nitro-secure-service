@@ -12,7 +12,7 @@ trusted_headers = []
 
 [egress]
 enabled = true
-destinations = ["dev.auth.zelus.io"]
+destinations = ["dev.auth.zelus.io","*.amazonaws.com"]
 
 [signing]
 certPath = "./cert.pem"
