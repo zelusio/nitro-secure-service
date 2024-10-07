@@ -11,7 +11,8 @@ forward_proxy_protocol = false
 trusted_headers = []
 
 [egress]
-enabled = false
+enabled = true
+destinations = ["dev.auth.zelus.io"]
 
 [signing]
 certPath = "./cert.pem"
