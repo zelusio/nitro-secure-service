@@ -11,8 +11,7 @@ forward_proxy_protocol = false
 trusted_headers = []
 
 [egress]
-enabled = true
-destinations = ["dev.auth.zelus.io","*.amazonaws.com"]
+enabled = false
 
 [signing]
 certPath = "./cert.pem"
