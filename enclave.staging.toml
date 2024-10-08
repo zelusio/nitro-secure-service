@@ -12,7 +12,8 @@ forward_proxy_protocol = false
 trusted_headers = []
 
 [egress]
-enabled = false
+enabled = true
+destinations = ["*.auth.zelus.io","nitro-secure-service-keys-staging.s3.us-east-1.amazonaws.com"]
 
 [signing]
 certPath = "./cert.pem"
