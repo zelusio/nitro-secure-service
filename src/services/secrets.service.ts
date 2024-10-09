@@ -33,7 +33,7 @@ function requireEnv(variableName: string, defaultValue?: string): string {
  * environment-related (prod/dev/staging) issues
  */
 export const secrets: ISecrets = {
-  ENVIRONMENT: requireEnv('ENVIRONMENT'),
+  ENVIRONMENT: requireEnv('ENVIRONMENT', 'dev'),
   EVERVAULT_APP_ID: requireEnv('EVERVAULT_APP_ID', 'test'), // it is used only in tests
   EVERVAULT_API_KEY: requireEnv('EVERVAULT_API_KEY', 'test'), // it is used only in tests
   AUTH_API_URL: requireEnv('AUTH_API_URL', 'http://localhost:8000'),
