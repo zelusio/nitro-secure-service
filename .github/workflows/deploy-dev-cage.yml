@@ -14,6 +14,7 @@ on:
       - package*
     branches:
       - develop
+      - 'fix/ZEL-2179'
 
 jobs:
   deploy-cage:
