@@ -20,7 +20,9 @@ export interface ISecrets {
  */
 function requireEnv(variableName: string, defaultValue?: string): string {
   const value = process.env[variableName] || defaultValue;
-  if (!value) throw new Error(`Missing environment variable ${variableName}!`);
+  if (!value) {
+    throw new Error(`Missing environment variable ${variableName}!`);
+  }
   return value;
 }
 
@@ -31,9 +33,9 @@ function requireEnv(variableName: string, defaultValue?: string): string {
  * environment-related (prod/dev/staging) issues
  */
 export const secrets: ISecrets = {
-  ENVIRONMENT: requireEnv('ENVIRONMENT'),
-  EVERVAULT_APP_ID: requireEnv('EVERVAULT_APP_ID'),
-  EVERVAULT_API_KEY: requireEnv('EVERVAULT_API_KEY'),
+  ENVIRONMENT: requireEnv('ENVIRONMENT', 'dev'),
+  EVERVAULT_APP_ID: requireEnv('EVERVAULT_APP_ID', 'test'), // it is used only in tests
+  EVERVAULT_API_KEY: requireEnv('EVERVAULT_API_KEY', 'test'), // it is used only in tests
   AUTH_API_URL: requireEnv('AUTH_API_URL', 'http://localhost:8000'),
   AUTH_ISSUER: requireEnv('AUTH_ISSUER', 'http://localhost:8000'),
   NSS_ISSUER: requireEnv('NSS_ISSUER', 'http://localhost:3000'),
