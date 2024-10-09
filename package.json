@@ -29,6 +29,7 @@
     "node-jose": "^2.2.0"
   },
   "devDependencies": {
+    "@evervault/attestation-bindings": "^1.0.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/body-parser": "^1.19.5",
     "@types/chai": "^4.3.20",
