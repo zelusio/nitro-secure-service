@@ -1,5 +1,5 @@
 import Evervault from '@evervault/sdk';
-import { secrets } from './secrets.service';
+import { secrets } from './secrets.service.js';
 
 const { ENVIRONMENT, EVERVAULT_APP_ID, EVERVAULT_API_KEY } = secrets;
 

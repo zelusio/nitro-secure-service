@@ -1,5 +1,5 @@
 import jose from 'node-jose';
-import { IJwkExternalStore } from './IJwkExternalStore';
+import { IJwkExternalStore } from './IJwkExternalStore.js';
 
 export default class JwkMemoryStore implements IJwkExternalStore {
   private keys: jose.JWK.Key[] | undefined;

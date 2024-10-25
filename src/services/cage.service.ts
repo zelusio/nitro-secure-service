@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { secrets } from './secrets.service';
+import { secrets } from './secrets.service.js';
 import {
   IDecryptedWalletEmail,
   IDecryptedWalletPhone,
   IDecryptedWalletService,
   IEncryptedWallet,
   IWalletServiceData
-} from '../interfaces/wallet.interface';
-import { encryptBySdk, decryptBySdk } from './evervault.service';
-import loggingService from './logging.service';
+} from '../interfaces/wallet.interface.js';
+import { encryptBySdk, decryptBySdk } from './evervault.service.js';
+import loggingService from './logging.service.js';
 
 const { ENVIRONMENT } = secrets;
 const CAGE_ENCRYPT_URL = 'http://127.0.0.1:9999/encrypt';

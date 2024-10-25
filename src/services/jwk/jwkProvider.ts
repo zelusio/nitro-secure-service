@@ -1,5 +1,5 @@
 import jose from 'node-jose';
-import { IJwkExternalStore } from './IJwkExternalStore';
+import { IJwkExternalStore } from './IJwkExternalStore.js';
 
 export default class JWKProvider {
   private readonly keyStore: jose.JWK.KeyStore;

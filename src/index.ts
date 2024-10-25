@@ -1,4 +1,4 @@
-import { createExpressApp } from './app';
+import { createExpressApp } from './app.js';
 
 const port = process.env.PORT || 3000;
 

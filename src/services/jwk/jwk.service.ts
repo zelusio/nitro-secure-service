@@ -1,8 +1,8 @@
 import jose from 'node-jose';
-import logService from '../logging.service';
-import JWKProvider from './jwkProvider';
-import JwkS3Store from './jwkS3Store';
-import S3JobLockService from './s3JobLock.service';
+import logService from '../logging.service.js';
+import JWKProvider from './jwkProvider.js';
+import JwkS3Store from './jwkS3Store.js';
+import S3JobLockService from './s3JobLock.service.js';
 
 const KEY_ROTATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
 const KEY_ROTATION_LOCK = 'key-rotation';

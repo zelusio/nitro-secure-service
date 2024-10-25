@@ -1,27 +1,27 @@
 import { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
 import { requireJWT, requireScope, Scope, JWTMiddlewareOptions, verifyJWT } from '@zelusio/auth-lib';
-import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service';
-import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface';
+import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service.js';
+import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface.js';
 import {
   decryptWalletForService,
   decryptWalletWithEmail,
   encryptWalletForService,
   encryptWalletWithEmail,
   encryptWalletWithPhone
-} from '../../services/cage.service';
-import loggingService from '../../services/logging.service';
+} from '../../services/cage.service.js';
+import loggingService from '../../services/logging.service.js';
 import {
   IResponseError,
   IResponseSignedTransaction,
   IResponseWalletCreateEmail,
   IResponseWalletCreatePhone,
   IResponseWalletCreateService
-} from '../../interfaces/response.interface';
-import { ERROR_CODES } from '../../constants/errors';
-import { encryptByPublicKey, getEncryptedWallet } from '../../services/exportWallet.service';
-import { secrets } from '../../services/secrets.service';
-import { RequestWithId } from '../../utilities/requestId';
+} from '../../interfaces/response.interface.js';
+import { ERROR_CODES } from '../../constants/errors.js';
+import { encryptByPublicKey, getEncryptedWallet } from '../../services/exportWallet.service.js';
+import { secrets } from '../../services/secrets.service.js';
+import { RequestWithId } from '../../utilities/requestId.js';
 
 const router: Router = Router();
 export default router;
