@@ -1,12 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import { Request, Response, NextFunction } from 'express';
 
-export const ATTRIBUTE_NAME = 'id';
+export const ID_ATTRIBUTE_NAME = 'id';
 
-export const HEADER_NAME = 'X-Request-Id';
+export const REQUEST_ID_HEADER_NAME = 'X-Request-Id';
 
 export interface RequestWithId extends Request {
-  [ATTRIBUTE_NAME]: string;
+  [ID_ATTRIBUTE_NAME]: string;
 }
 
 /**
@@ -19,7 +19,7 @@ export interface RequestWithId extends Request {
  *
  * @returns {Function} - middleware function
  */
-export function requestId({ generator = randomUUID, headerName = HEADER_NAME, setHeader = true } = {}) {
+export function requestId({ generator = randomUUID, headerName = REQUEST_ID_HEADER_NAME, setHeader = true } = {}) {
   return function requestIdMiddleware(request: Request, response: Response, next: NextFunction) {
     const oldValue = request.get(headerName);
     const id = oldValue ?? generator();
@@ -28,7 +28,7 @@ export function requestId({ generator = randomUUID, headerName = HEADER_NAME, se
       response.set(headerName, id);
     }
 
-    (<RequestWithId>request)[ATTRIBUTE_NAME] = id;
+    (<RequestWithId>request)[ID_ATTRIBUTE_NAME] = id;
 
     next();
   };

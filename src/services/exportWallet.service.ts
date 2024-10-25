@@ -3,7 +3,9 @@ import crypto from 'node:crypto';
 import { JWTIssuer, Scope } from '@zelusio/auth-lib';
 import JWKService from './jwk/jwk.service';
 import { secrets } from './secrets.service';
-import { HEADER_NAME } from '../utilities/requestId';
+import { REQUEST_ID_HEADER_NAME } from '../utilities/requestId';
+
+const NSS_TOKEN_HEADER_NAME = 'X-Nss-Auth';
 
 export interface IAuthWalletEncryptedResponse {
   encrypted_wallet: string;
@@ -30,8 +32,8 @@ export async function getEncryptedWalletForUser(
     {
       headers: {
         Authorization: `Bearer ${authToken}`,
-        'nss-auth': `Bearer ${nssToken}`,
-        [HEADER_NAME]: requestId
+        [NSS_TOKEN_HEADER_NAME]: `Bearer ${nssToken}`,
+        [REQUEST_ID_HEADER_NAME]: requestId
       }
     }
   );
