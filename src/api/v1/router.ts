@@ -21,6 +21,7 @@ import {
 import { ERROR_CODES } from '../../constants/errors';
 import { encryptByPublicKey, getEncryptedWallet } from '../../services/exportWallet.service';
 import { secrets } from '../../services/secrets.service';
+import { RequestWithId } from '../../utilities/requestId';
 
 const router: Router = Router();
 export default router;
@@ -102,6 +103,8 @@ router.post('/wallet', async (req: Request, res: Response) => {
   }
 });
 
+const MESSAGE_NOT_EXPORT = 'Could not export wallet';
+
 // EXPORT WALLET
 router.post(
   '/wallet/export',
@@ -117,12 +120,12 @@ router.post(
       const subject = payload.sub as string;
       const email = payload.email as string;
 
-      const encryptedWalletText = await getEncryptedWallet(authToken, subject);
+      const encryptedWalletText = await getEncryptedWallet(authToken, subject, (req as RequestWithId).id);
       const decryptedWalletWithEmail = await decryptWalletWithEmail({ encryptedWallet: encryptedWalletText });
 
       if (email !== decryptedWalletWithEmail.email) {
         const error: IResponseError = {
-          message: 'Could not export wallet',
+          message: MESSAGE_NOT_EXPORT,
           code: ERROR_CODES.FORBIDDEN
         };
 
@@ -133,10 +136,10 @@ router.post(
 
       return res.status(200).send({ data: { invisible_wallet: invisibleWallet } });
     } catch (err: any) {
-      loggingService.error('Could not export wallet', err.message);
+      loggingService.error(MESSAGE_NOT_EXPORT, err.message);
 
       const error: IResponseError = {
-        message: 'Could not export wallet',
+        message: secrets.ENVIRONMENT === 'dev' ? err.message : MESSAGE_NOT_EXPORT,
         code: ERROR_CODES.INTERNAL_ERROR
       };
 
@@ -221,6 +224,7 @@ router.post('/service/wallet/import', async (req: Request, res: Response) => {
   }
 });
 
+// SIGN TRANSACTION
 router.post('/transaction/sign', async (req: Request, res: Response) => {
   try {
     const { accountId, transaction, encryptedWallet } = req.body;

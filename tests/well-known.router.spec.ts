@@ -34,7 +34,7 @@ describe('Well-Known API Tests', function () {
     it('GET /.well-known/jwks.json for DEV url should return 200', async function () {
       const res = await axios.get(DEV_URL + '/.well-known/jwks.json', {
         headers: {
-          'Content-Typ': 'application/json',
+          'Content-Type': 'application/json',
           'api-key': secrets.EVERVAULT_API_KEY
         },
         validateStatus: () => true
@@ -75,7 +75,7 @@ describe('Well-Known API Tests', function () {
 
       const res = await axios.get(DEV_URL + '/.well-known/jwks.json', {
         headers: {
-          'Content-Typ': 'application/json',
+          'Content-Type': 'application/json',
           'api-key': secrets.EVERVAULT_API_KEY
         },
         httpsAgent: enclaveHttpsAgent,
