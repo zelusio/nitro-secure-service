@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import JWKService from '../services/jwk/jwk.service.js';
+import { getJWKProviderInstance } from '../services/jwk/jwkProvider.js';
 
 const router: Router = Router();
 
@@ -50,7 +50,7 @@ export default router;
 router.get('/jwks.json', getPublicJWKs);
 
 async function getPublicJWKs(request: Request, response: Response) {
-  const keyServiceInstance = await JWKService.getProviderInstance();
-  const publicKeys = keyServiceInstance.getPublicKeys();
+  const jwkProvider = getJWKProviderInstance();
+  const publicKeys = await jwkProvider.getPublicKeys();
   return response.status(200).json(publicKeys);
 }

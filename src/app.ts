@@ -3,6 +3,8 @@ import apiV1Router from './api/v1/router.js';
 import bodyParser from 'body-parser';
 import wellKnownRouter from './api/well-known.router.js';
 import { requestId } from './utilities/requestId.js';
+import scheduleJobs from './scheduleJobs.js';
+import { secrets } from './services/secrets.service.js';
 
 export function createExpressApp() {
   const app: Express = express();
@@ -21,6 +23,10 @@ export function createExpressApp() {
 
   app.use('/api/v1', apiV1Router);
   app.use('/.well-known', wellKnownRouter);
+
+  if (['dev', 'staging', 'prod'].includes(secrets.ENVIRONMENT)) {
+    scheduleJobs();
+  }
 
   return app;
 }

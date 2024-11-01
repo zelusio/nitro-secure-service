@@ -1,4 +1,3 @@
-import jose from 'node-jose';
 import crypto from 'crypto';
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { IJwkExternalStore } from './IJwkExternalStore.js';
@@ -16,7 +15,7 @@ export default class JwkS3Store implements IJwkExternalStore {
     this.objectKey = objectKey;
   }
 
-  public async getKeys(): Promise<jose.JWK.Key[]> {
+  public async getKeys(): Promise<any[]> {
     const encryptedText = await this.getObjectFromS3();
 
     if (!encryptedText) {
@@ -44,7 +43,7 @@ export default class JwkS3Store implements IJwkExternalStore {
     }
   }
 
-  async saveKeys(keys: jose.JWK.Key[]): Promise<void> {
+  async saveKeys(keys: any[]): Promise<void> {
     const text = JSON.stringify({ keys, updatedAt: Date.now() });
     const encryptedText = await encryptByCage(text);
 
