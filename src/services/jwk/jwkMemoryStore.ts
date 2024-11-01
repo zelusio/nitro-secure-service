@@ -1,17 +1,16 @@
-import jose from 'node-jose';
 import { IJwkExternalStore } from './IJwkExternalStore';
 
 export default class JwkMemoryStore implements IJwkExternalStore {
-  private keys: jose.JWK.Key[] | undefined;
+  private keys: any[] | undefined;
 
-  public async getKeys(): Promise<jose.JWK.Key[]> {
+  public async getKeys<T>(): Promise<T[]> {
     if (!this.keys) {
       return [];
     }
     return Promise.resolve(this.keys);
   }
 
-  public async saveKeys(keys: jose.JWK.Key[]): Promise<void> {
+  public async saveKeys<T>(keys: T[]): Promise<void> {
     this.keys = keys;
     return Promise.resolve();
   }

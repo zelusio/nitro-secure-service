@@ -1,9 +1,9 @@
 import axios from 'axios';
 import crypto from 'node:crypto';
 import { JWTIssuer, Scope } from '@zelusio/auth-lib';
-import JWKService from './jwk/jwk.service';
 import { secrets } from './secrets.service';
 import { REQUEST_ID_HEADER_NAME } from '../utilities/requestId';
+import { getJWKProviderInstance } from './jwk/jwkProvider';
 
 const NSS_TOKEN_HEADER_NAME = 'X-Nss-Auth';
 
@@ -12,9 +12,9 @@ export interface IAuthWalletEncryptedResponse {
 }
 
 export async function getEncryptedWallet(authToken: string, subject: string, requestId: string): Promise<string> {
-  const keyServiceInstance = await JWKService.getProviderInstance();
+  const jwkProvider = getJWKProviderInstance();
 
-  const jwtIssuer = new JWTIssuer(secrets.NSS_ISSUER, await keyServiceInstance.getDefaultSigningKey());
+  const jwtIssuer = new JWTIssuer(secrets.NSS_ISSUER, await jwkProvider.getDefaultPrivateKey());
   const nssToken = await jwtIssuer.issueAccessToken(subject, [], [Scope.InvisibleWalletExport]);
   const walletEncrypted = await getEncryptedWalletForUser(authToken, nssToken, requestId);
 
