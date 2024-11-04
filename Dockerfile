@@ -1,4 +1,5 @@
-FROM node:18.20.4-alpine AS builder
+# Node.js official Docker images https://hub.docker.com/_/node
+FROM node:22.11.0-alpine AS builder
 
 WORKDIR /usr/app
 COPY tsconfig.json .
@@ -9,7 +10,7 @@ RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm install
 COPY ./src ./src
 RUN npm run build
 
-FROM node:18.20.4-slim
+FROM node:22.11.0-slim
 
 WORKDIR /usr/app
 RUN chown node:node .

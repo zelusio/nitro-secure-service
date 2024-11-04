@@ -1,9 +1,9 @@
 import axios from 'axios';
 import crypto from 'node:crypto';
 import { JWTIssuer, Scope } from '@zelusio/auth-lib';
-import { secrets } from './secrets.service';
-import { REQUEST_ID_HEADER_NAME } from '../utilities/requestId';
-import { getJWKProviderInstance } from './jwk/jwkProvider';
+import { secrets } from './secrets.service.js';
+import { REQUEST_ID_HEADER_NAME } from '../utilities/requestId.js';
+import { getJWKProviderInstance } from './jwk/jwkProvider.js';
 
 const NSS_TOKEN_HEADER_NAME = 'X-Nss-Auth';
 

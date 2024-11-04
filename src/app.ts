@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from 'express';
-import apiV1Router from './api/v1/router';
+import apiV1Router from './api/v1/router.js';
 import bodyParser from 'body-parser';
-import wellKnownRouter from './api/well-known.router';
-import { requestId } from './utilities/requestId';
-import scheduleJobs from './scheduleJobs';
-import { secrets } from './services/secrets.service';
+import wellKnownRouter from './api/well-known.router.js';
+import { requestId } from './utilities/requestId.js';
+import scheduleJobs from './scheduleJobs.js';
+import { secrets } from './services/secrets.service.js';
 
 export function createExpressApp() {
   const app: Express = express();

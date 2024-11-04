@@ -1,8 +1,8 @@
 import { JWKService } from '@zelusio/auth-lib';
-import logService from '../logging.service';
-import JwkS3Store from './jwkS3Store';
-import S3JobLockService from './s3JobLock.service';
-import { IJwkExternalStore } from './IJwkExternalStore';
+import logService from '../logging.service.js';
+import JwkS3Store from './jwkS3Store.js';
+import S3JobLockService from './s3JobLock.service.js';
+import { IJwkExternalStore } from './IJwkExternalStore.js';
 
 const CACHE_EXPIRATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 const KEY_ROTATION_LOCK = 'key-rotation';

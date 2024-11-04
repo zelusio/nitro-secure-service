@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { BUCKET_NAME, REGION } from './s3.config';
+import { BUCKET_NAME, REGION } from './s3.config.js';
 
 export class S3JobLockService {
   private readonly s3client: S3Client;

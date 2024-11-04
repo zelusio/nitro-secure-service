@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { getJWKProviderInstance } from '../services/jwk/jwkProvider';
+import { getJWKProviderInstance } from '../services/jwk/jwkProvider.js';
 
 const router: Router = Router();
 

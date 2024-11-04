@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { IJwkExternalStore } from './IJwkExternalStore';
-import { decryptByCage, encryptByCage } from '../cage.service';
-import { BUCKET_NAME, S3_KEY, REGION } from './s3.config';
+import { IJwkExternalStore } from './IJwkExternalStore.js';
+import { decryptByCage, encryptByCage } from '../cage.service.js';
+import { BUCKET_NAME, S3_KEY, REGION } from './s3.config.js';
 
 export default class JwkS3Store implements IJwkExternalStore {
   private readonly s3client: S3Client;
