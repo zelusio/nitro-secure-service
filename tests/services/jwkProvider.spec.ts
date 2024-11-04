@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import JWKProvider from '../../src/services/jwk/jwkProvider';
-import JwkMemoryStore from '../../src/services/jwk/jwkMemoryStore';
+import JWKProvider from '../../src/services/jwk/jwkProvider.js';
+import JwkMemoryStore from '../../src/services/jwk/jwkMemoryStore.js';
 
 describe('JWK Provider Tests', function () {
   it('Should return created one key', async function () {
