@@ -14,6 +14,7 @@ on:
       - package*
     branches:
       - develop
+      - 'fix/deploy'
 
 jobs:
   deploy-cage:
