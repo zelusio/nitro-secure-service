@@ -7,7 +7,8 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:mocha/recommended",
-    "plugin:security/recommended-legacy"
+    "plugin:security/recommended-legacy",
+    "plugin:require-extensions/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -16,7 +17,8 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "mocha"
+    "mocha",
+    "require-extensions"
   ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
