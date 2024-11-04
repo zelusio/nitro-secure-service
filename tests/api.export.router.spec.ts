@@ -4,9 +4,9 @@ import nock from 'nock';
 import { Express } from 'express';
 import crypto from 'node:crypto';
 import { JWKService, JWTIssuer, Scope } from '@zelusio/auth-lib';
-import { createExpressApp } from '../src/app';
-import { encryptWalletWithEmail } from '../src/services/cage.service';
-import { secrets } from '../src/services/secrets.service';
+import { createExpressApp } from '../src/app.js';
+import { encryptWalletWithEmail } from '../src/services/cage.service.js';
+import { secrets } from '../src/services/secrets.service.js';
 
 chai.use(chaiHttp);
 

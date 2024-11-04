@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { S3JobLockService } from '../../src/services/jwk/s3JobLock.service';
+import { S3JobLockService } from '../../src/services/jwk/s3JobLock.service.js';
 
 // These test sets could be run with at least a 30-second interval between runs.
 describe('S3JobLockService Tests', function () {

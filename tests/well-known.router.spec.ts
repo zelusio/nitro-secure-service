@@ -2,8 +2,8 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Express } from 'express';
 import axios from 'axios';
-import { createExpressApp } from '../src/app';
-import { secrets } from '../src/services/secrets.service';
+import { createExpressApp } from '../src/app.js';
+import { secrets } from '../src/services/secrets.service.js';
 import EvervaultClient from '@evervault/sdk';
 import AttestationBindings from '@evervault/attestation-bindings';
 
