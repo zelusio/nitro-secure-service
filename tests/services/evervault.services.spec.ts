@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { decryptBySdk, encryptBySdk } from '../../src/services/evervault.service';
+import { decryptBySdk, encryptBySdk } from '../../src/services/evervault.service.js';
 
 describe('Evervault Service Tests', function () {
   it('Encrypt by SDK should ok', async function () {

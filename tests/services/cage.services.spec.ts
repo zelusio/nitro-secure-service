@@ -1,15 +1,15 @@
 import { expect } from 'chai';
-import { decryptBySdk } from '../../src/services/evervault.service';
+import { decryptBySdk } from '../../src/services/evervault.service.js';
 import {
   encryptWalletForService,
   encryptWalletWithEmail,
   encryptWalletWithPhone
-} from '../../src/services/cage.service';
+} from '../../src/services/cage.service.js';
 import {
   IDecryptedWalletEmail,
   IDecryptedWalletPhone,
   IDecryptedWalletService
-} from '../../src/interfaces/wallet.interface';
+} from '../../src/interfaces/wallet.interface.js';
 
 describe('Cage Service Tests', function () {
   it('encryptWalletWithEmail should ok', async function () {

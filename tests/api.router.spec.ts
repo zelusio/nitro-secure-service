@@ -2,13 +2,13 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Express } from 'express';
 import { Wallet, Transaction } from 'ethers';
-import { createExpressApp } from '../src/app';
-import { decryptBySdk } from '../src/services/evervault.service';
+import { createExpressApp } from '../src/app.js';
+import { decryptBySdk } from '../src/services/evervault.service.js';
 import {
   IDecryptedWalletEmail,
   IDecryptedWalletPhone,
   IDecryptedWalletService
-} from '../src/interfaces/wallet.interface';
+} from '../src/interfaces/wallet.interface.js';
 
 chai.use(chaiHttp);
 

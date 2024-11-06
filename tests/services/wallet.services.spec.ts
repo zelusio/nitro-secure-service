@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { createWallet, getAddressFromPrivateKey } from '../../src/services/wallet.service';
-import { IDecryptedWallet } from '../../src/interfaces/wallet.interface';
+import { createWallet, getAddressFromPrivateKey } from '../../src/services/wallet.service.js';
+import { IDecryptedWallet } from '../../src/interfaces/wallet.interface.js';
 import { Wallet } from 'ethers';
 
 describe('Wallet Service Tests', function () {

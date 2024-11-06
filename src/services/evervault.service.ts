@@ -1,9 +1,7 @@
 import Evervault from '@evervault/sdk';
-import dotenv from 'dotenv';
+import { secrets } from './secrets.service.js';
 
-dotenv.config();
-
-const { ENVIRONMENT, EVERVAULT_APP_ID, EVERVAULT_API_KEY } = process.env;
+const { ENVIRONMENT, EVERVAULT_APP_ID, EVERVAULT_API_KEY } = secrets;
 
 // Mock evervault because in cage we don't need it
 const mockEvervault = {

@@ -19,7 +19,12 @@ jobs:
   deploy-cage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .npmrc for access to GitHub Packages
+        run: echo -e "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}\n@zelusio:registry=https://npm.pkg.github.com/" > .npmrc
+
       - name: Deploy Dev Cage
         env:
           EV_API_KEY: ${{ secrets.DEV_EVERVAULT_API_KEY }}
@@ -31,10 +36,10 @@ jobs:
           sh <(curl https://cli.evervault.com/v4/install -sL)
           echo "$EV_CERT" > cert.pem
           echo "$EV_KEY" > key.pem
-          ev enclave deploy -c $TOML_FILE_NAME
+          ev enclave deploy -v -c $TOML_FILE_NAME --build-secret id=npmrc,src=.npmrc
 
       - name: Save PCR Attestations to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pcr-attestations
           path: ${{ env.TOML_FILE_NAME }}
@@ -47,7 +52,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 

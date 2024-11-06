@@ -9,10 +9,11 @@ api_key_auth = true
 trx_logging = true
 tls_termination = true
 forward_proxy_protocol = false
-trusted_headers = []
+trusted_headers = ["X-Request-Id"]
 
 [egress]
-enabled = false
+enabled = true
+destinations = ["auth.zelus.io","nitro-secure-service-keys-prod.s3.us-east-1.amazonaws.com"]
 
 [signing]
 certPath = "./cert.pem"

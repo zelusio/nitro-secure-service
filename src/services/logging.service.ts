@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-/* eslint-disable no-console */
+/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
 export function log(...args: any[]) {
   console.log(`[${new Date().toISOString()} INFO  ] `, ...args);
 }
