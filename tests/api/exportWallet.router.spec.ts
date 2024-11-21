@@ -4,9 +4,9 @@ import nock from 'nock';
 import { Express } from 'express';
 import crypto from 'node:crypto';
 import { JWKService, JWTIssuer, Scope } from '@zelusio/auth-lib';
-import { createExpressApp } from '../src/app.js';
-import { encryptWalletWithEmail } from '../src/services/cage.service.js';
-import { secrets } from '../src/services/secrets.service.js';
+import { createExpressApp } from '../../src/app.js';
+import { encryptWalletWithEmail } from '../../src/services/cage.service.js';
+import { secrets } from '../../src/services/secrets.service.js';
 
 chai.use(chaiHttp);
 
@@ -50,6 +50,7 @@ describe('Wallet Export API Tests', function () {
       if (!nock.isActive()) {
         nock.activate();
       }
+      nock.cleanAll();
     });
 
     afterEach(function () {

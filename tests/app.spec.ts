@@ -24,4 +24,11 @@ describe('HTTP Status Code Tests', function () {
 
     expect(res.status).to.equal(404);
   });
+
+  it('GET /api/v1/version should 200', async function () {
+    const res = await chai.request(expressApp).get('/api/v1/version');
+
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('version', '1');
+  });
 });
