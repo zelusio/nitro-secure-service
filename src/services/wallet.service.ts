@@ -1,6 +1,6 @@
 import { Wallet } from 'ethers';
-import { IDecryptedWallet } from '../interfaces/wallet.interface';
-import loggingService from './logging.service';
+import { IDecryptedWallet } from '../interfaces/wallet.interface.js';
+import loggingService from './logging.service.js';
 
 export function createWallet(): IDecryptedWallet {
   const wallet = Wallet.createRandom();

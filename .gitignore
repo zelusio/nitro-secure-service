@@ -144,3 +144,6 @@ cert.pem
 enclave.Dockerfile
 enclave.eif
 nitro-cli-image.Dockerfile
+
+# npm settings for private packages
+.npmrc
