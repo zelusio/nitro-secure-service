@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
 import { requireJWT, requireScope, Scope, JWTMiddlewareOptions, verifyJWT } from '@zelusio/auth-lib';
-import { createWallet, getAddressFromPrivateKey } from '../../services/wallet.service.js';
+import { createWallet } from '../../services/wallet.service.js';
 import { IDecryptedWallet, IDecryptedWalletService, IEncryptedWallet } from '../../interfaces/wallet.interface.js';
 import {
   decryptWalletForService,
@@ -191,48 +191,6 @@ router.post(
     }
   }
 );
-
-// ENCRYPT IMPORTED WALLET FOR SERVICE WALLET
-router.post('/service/wallet/import', async (req: Request, res: Response) => {
-  try {
-    const { accountId, privateKey } = req.body;
-
-    if (!accountId || !privateKey) {
-      return res.status(400).send({
-        error: {
-          message: 'Not provided accountId or privateKey',
-          code: ERROR_CODES.BAD_REQUEST
-        }
-      });
-    }
-
-    const ethereumAddress = getAddressFromPrivateKey(privateKey);
-
-    const encryptedWallet: IEncryptedWallet = await encryptWalletForService({
-      ethereumAddress,
-      privateKey,
-      accountId
-    });
-
-    const data: IResponseWalletCreateService = {
-      ...encryptedWallet,
-      ethereumAddress,
-      accountId,
-      isServiceAccount: true
-    };
-
-    return res.status(200).send({ data });
-  } catch (err: any) {
-    loggingService.error('Could not import wallet for service', err.message);
-
-    const error: IResponseError = {
-      message: 'Could not import wallet for service',
-      code: ERROR_CODES.INTERNAL_ERROR
-    };
-
-    return res.status(500).send({ error });
-  }
-});
 
 // SIGN TRANSACTION
 router.post(

@@ -6,6 +6,7 @@ import nock from 'nock';
 import { JWKService, JWTIssuer, Scope } from '@zelusio/auth-lib';
 import { createExpressApp } from '../../src/app.js';
 import { getJWKConfigs } from '../helper.js';
+import { encryptWalletForService } from '../../src/services/cage.service.js';
 
 chai.use(chaiHttp);
 
@@ -38,19 +39,11 @@ describe('Transaction Sign API Tests', function () {
     const privateKey = wallet.privateKey;
     const accountId = 'account_123';
 
-    const resImport = await chai
-      .request(expressApp)
-      .post('/api/v1/service/wallet/import')
-      .auth(authToken, { type: 'bearer' })
-      .send({ accountId, privateKey });
-
-    expect(resImport.status).to.equal(200);
-
-    expect(resImport.body).to.have.property('data');
-    expect(resImport.body.data).to.have.property('encryptedWallet');
-    expect(resImport.body.data).to.have.property('ethereumAddress', ethereumAddress);
-    expect(resImport.body.data).to.have.property('accountId', accountId);
-    expect(resImport.body.data).to.have.property('isServiceAccount', true);
+    const encryptedWalletData = await encryptWalletForService({
+      ethereumAddress,
+      privateKey,
+      accountId
+    });
 
     const accountIdInvalid = 'account_id_invalid';
     const tx = new Transaction();
@@ -63,7 +56,7 @@ describe('Transaction Sign API Tests', function () {
       .send({
         accountId: accountIdInvalid,
         transaction: tx.unsignedSerialized,
-        encryptedWallet: resImport.body.data.encryptedWallet
+        encryptedWallet: encryptedWalletData.encryptedWallet
       });
 
     expect(res.status).to.equal(400);
@@ -79,19 +72,11 @@ describe('Transaction Sign API Tests', function () {
     const privateKey = wallet.privateKey;
     const accountId = 'account_123';
 
-    const resImport = await chai
-      .request(expressApp)
-      .post('/api/v1/service/wallet/import')
-      .auth(authToken, { type: 'bearer' })
-      .send({ accountId, privateKey });
-
-    expect(resImport.status).to.equal(200);
-
-    expect(resImport.body).to.have.property('data');
-    expect(resImport.body.data).to.have.property('encryptedWallet');
-    expect(resImport.body.data).to.have.property('ethereumAddress', ethereumAddress);
-    expect(resImport.body.data).to.have.property('accountId', accountId);
-    expect(resImport.body.data).to.have.property('isServiceAccount', true);
+    const encryptedWalletData = await encryptWalletForService({
+      ethereumAddress,
+      privateKey,
+      accountId
+    });
 
     const tx = new Transaction();
     tx.to = ethereumAddress;
@@ -103,7 +88,7 @@ describe('Transaction Sign API Tests', function () {
       .send({
         accountId,
         transaction: tx.unsignedSerialized,
-        encryptedWallet: resImport.body.data.encryptedWallet
+        encryptedWallet: encryptedWalletData.encryptedWallet
       });
 
     expect(res.status).to.equal(200);
