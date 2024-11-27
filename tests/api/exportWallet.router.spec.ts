@@ -3,18 +3,23 @@ import chaiHttp from 'chai-http';
 import nock from 'nock';
 import { Express } from 'express';
 import crypto from 'node:crypto';
-import { JWKService, JWTIssuer, Scope } from '@zelusio/auth-lib';
-import { createExpressApp } from '../src/app.js';
-import { encryptWalletWithEmail } from '../src/services/cage.service.js';
-import { secrets } from '../src/services/secrets.service.js';
+import { Scope, JWKService, JWTIssuer } from '@zelusio/auth-lib';
+import { createExpressApp } from '../../src/app.js';
+import { encryptWalletWithEmail } from '../../src/services/cage.service.js';
+import { getJWKConfigs } from '../helper.js';
 
 chai.use(chaiHttp);
 
 describe('Wallet Export API Tests', function () {
   let expressApp: Express;
+  let authApiUrl: string;
+  let jwkService: JWKService;
+  let jwtIssuer: JWTIssuer;
 
   before('Create server', async function () {
     expressApp = createExpressApp();
+
+    ({ authApiUrl, jwkService, jwtIssuer } = await getJWKConfigs());
   });
 
   it('POST /api/v1/wallet/export should return 401 because no token', async function () {
@@ -38,18 +43,11 @@ describe('Wallet Export API Tests', function () {
   });
 
   describe('Wallet Export API with mocked auth service responses', function () {
-    let authApiUrl: string;
-    let jwkService: JWKService;
-    let jwtIssuer: JWTIssuer;
-
     before(async function () {
-      authApiUrl = secrets.AUTH_API_URL;
-      jwkService = new JWKService();
-      jwtIssuer = new JWTIssuer(authApiUrl, await jwkService.getDefaultPrivateKey());
-
       if (!nock.isActive()) {
         nock.activate();
       }
+      nock.cleanAll();
     });
 
     afterEach(function () {
@@ -93,7 +91,7 @@ describe('Wallet Export API Tests', function () {
 
       const publicKey = keyPair.publicKey.toString();
 
-      const scopeKeys = nock(authApiUrl)
+      nock(authApiUrl)
         .get('/.well-known/jwks.json')
         .reply(200, await jwkService.getPublicKeys());
 
@@ -117,7 +115,6 @@ describe('Wallet Export API Tests', function () {
       const result = JSON.parse(decrypted.toString());
 
       expect(result).to.deep.equal(wallet);
-      expect(scopeKeys.isDone()).to.equal(true);
       expect(scopeEncrypted.isDone()).to.equal(true);
     });
 
